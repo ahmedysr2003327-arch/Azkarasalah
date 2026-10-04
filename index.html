@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salah Adhkar Journey</title>
-    
+
     <!-- Fonts: Inter for UI/English, Amiri Quran, Amiri, Scheherazade New & Noto Naskh Arabic for perfect Uthmani script & Tashkeel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Scheherazade+New:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Scheherazade+New:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- html2canvas for certificate download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+
     <script>
         window.tailwind = window.tailwind || {};
         window.tailwind.config = {
@@ -46,15 +49,27 @@
     </script>
     <style>
         /* Custom Styles & Animations */
-        body { background-color: #f8fafc; }
-        .bg-pattern-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        
+        body {
+            background-color: #f8fafc;
+        }
+
+        .bg-pattern-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
         /* Viewport Lock for Zero Scrolling in Exercise View */
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             width: 100%;
         }
+
         body.exercise-active {
             height: 100vh;
             height: 100dvh;
@@ -62,9 +77,11 @@
             overflow: hidden !important;
             touch-action: manipulation;
         }
+
         body.exercise-active #main-nav {
             display: none !important;
         }
+
         body.exercise-active #app-container {
             height: 100vh !important;
             height: 100dvh !important;
@@ -74,6 +91,7 @@
             display: flex !important;
             flex-direction: column !important;
         }
+
         #view-exercise.active {
             display: flex !important;
             flex: 1 1 0% !important;
@@ -85,19 +103,43 @@
             flex-direction: column !important;
             justify-content: space-between !important;
         }
-        
+
         /* Smooth View Transitions - Ensure inactive views are completely hidden */
-        .view-section { display: none !important; opacity: 0 !important; visibility: hidden !important; }
-        .view-section.active { display: block !important; opacity: 1 !important; visibility: visible !important; }
-        #view-login.active { display: flex !important; opacity: 1 !important; visibility: visible !important; }
-        #view-exercise.active { display: flex !important; opacity: 1 !important; visibility: visible !important; }
-        #view-certificate.active { display: flex !important; opacity: 1 !important; visibility: visible !important; }
-        
+        .view-section {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+
+        .view-section.active {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        #view-login.active {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        #view-exercise.active {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        #view-certificate.active {
+            display: flex !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
         /* Arabic Text & Tashkeel Styling - High Precision Font Rendering for Uthmani Script */
-        .arabic-text { 
-            font-family: 'Amiri Quran', 'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', serif; 
-            direction: rtl; 
-            line-height: 2.5 !important; 
+        .arabic-text {
+            font-family: 'Amiri Quran', 'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', serif;
+            direction: rtl;
+            line-height: 2.5 !important;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
@@ -107,65 +149,317 @@
             padding-bottom: 0.35em;
             overflow-wrap: break-word;
         }
-        
+
         /* Interactive Elements */
-        .btn-press { transition: transform 0.1s, box-shadow 0.1s; }
-        .btn-press:active { transform: translateY(2px); box-shadow: none !important; }
-        
+        .btn-press {
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .btn-press:active {
+            transform: translateY(2px);
+            box-shadow: none !important;
+        }
+
         /* Word Ordering Game */
-        .word-slot { min-width: 75px; min-height: 52px; border: 2.5px dashed #94a3b8; border-radius: 1rem; display: inline-flex; align-items: center; justify-content: center; margin: 6px; padding: 6px 16px; cursor: pointer; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); background: #f8fafc; font-size: 1.5rem; }
-        @media (min-width: 640px) { .word-slot { min-width: 120px; min-height: 64px; padding: 8px 20px; font-size: 2.15rem; border-radius: 1.25rem; } }
-        @media (min-width: 1024px) { .word-slot { min-width: 140px; min-height: 74px; padding: 10px 24px; font-size: 2.65rem; } }
-        .word-slot.filled { border-style: solid; border-color: #10b981; background: #ecfdf5; box-shadow: 0 4px 12px rgba(16,185,129,0.18); color: #064e3b; }
-        
-        .word-bank-item { display: inline-flex; align-items: center; justify-content: center; padding: 8px 18px; margin: 6px; border-radius: 1rem; cursor: pointer; box-shadow: 0 4px 0 0 rgba(0,0,0,0.1); transition: all 0.15s ease-out; font-size: 1.5rem; user-select: none; }
-        @media (min-width: 640px) { .word-bank-item { padding: 12px 26px; font-size: 2.15rem; border-radius: 1.25rem; box-shadow: 0 5px 0 0 rgba(0,0,0,0.12); } }
-        @media (min-width: 1024px) { .word-bank-item { padding: 14px 32px; font-size: 2.65rem; } }
-        .word-bank-item:hover { transform: translateY(-2px); box-shadow: 0 7px 0 0 rgba(0,0,0,0.15); }
-        .word-bank-item:active { transform: translateY(2px); box-shadow: none; }
-        .word-bank-item.used { opacity: 0; pointer-events: none; transform: scale(0.85); transition: all 0.2s; }
-        
+        .word-slot {
+            min-width: 75px;
+            min-height: 52px;
+            border: 2.5px dashed #94a3b8;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 6px;
+            padding: 6px 16px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: #f8fafc;
+            font-size: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .word-slot {
+                min-width: 120px;
+                min-height: 64px;
+                padding: 8px 20px;
+                font-size: 2.15rem;
+                border-radius: 1.25rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .word-slot {
+                min-width: 140px;
+                min-height: 74px;
+                padding: 10px 24px;
+                font-size: 2.65rem;
+            }
+        }
+
+        .word-slot.filled {
+            border-style: solid;
+            border-color: #10b981;
+            background: #ecfdf5;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.18);
+            color: #064e3b;
+        }
+
+        .word-bank-item {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 18px;
+            margin: 6px;
+            border-radius: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.15s ease-out;
+            font-size: 1.5rem;
+            user-select: none;
+        }
+
+        @media (min-width: 640px) {
+            .word-bank-item {
+                padding: 12px 26px;
+                font-size: 2.15rem;
+                border-radius: 1.25rem;
+                box-shadow: 0 5px 0 0 rgba(0, 0, 0, 0.12);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .word-bank-item {
+                padding: 14px 32px;
+                font-size: 2.65rem;
+            }
+        }
+
+        .word-bank-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .word-bank-item:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        .word-bank-item.used {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.85);
+            transition: all 0.2s;
+        }
+
         /* Match Columns Game */
-        .match-btn { transition: all 0.2s; cursor: pointer; }
-        .match-btn.selected { border-color: #fbbf24; background-color: #fef3c7; transform: scale(1.02); }
-        .match-btn.matched { border-color: #22c55e; background-color: #f0fdf4; color: #166534; opacity: 0.7; pointer-events: none; }
-        
+        .match-btn {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .match-btn.selected {
+            border-color: #fbbf24;
+            background-color: #fef3c7;
+            transform: scale(1.02);
+        }
+
+        .match-btn.matched {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+            color: #166534;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
         /* Memory Cards Game */
-        .mem-card { perspective: 1000px; cursor: pointer; min-height: 140px; height: 100%; }
-        @media (min-width: 768px) { .mem-card { min-height: 180px; } }
-        .mem-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
-        .mem-card.flipped .mem-card-inner { transform: rotateY(180deg); }
-        .mem-card-front, .mem-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 1rem; padding: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.06); border: 2px solid #e2e8f0; }
-        .mem-card-front { background-color: #f8fafc; color: #cbd5e1; font-size: 2.5rem; }
-        .mem-card-front:hover { background-color: #f1f5f9; border-color: #cbd5e1; }
-        .mem-card-back { background-color: white; transform: rotateY(180deg); border-color: #14b8a6; }
-        .mem-card.matched .mem-card-inner { opacity: 0; transition: opacity 0.5s 0.5s, transform 0.6s; } 
+        .mem-card {
+            perspective: 1000px;
+            cursor: pointer;
+            min-height: 140px;
+            height: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .mem-card {
+                min-height: 180px;
+            }
+        }
+
+        .mem-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .mem-card.flipped .mem-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .mem-card-front,
+        .mem-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            padding: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            border: 2px solid #e2e8f0;
+        }
+
+        .mem-card-front {
+            background-color: #f8fafc;
+            color: #cbd5e1;
+            font-size: 2.5rem;
+        }
+
+        .mem-card-front:hover {
+            background-color: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .mem-card-back {
+            background-color: white;
+            transform: rotateY(180deg);
+            border-color: #14b8a6;
+        }
+
+        .mem-card.matched .mem-card-inner {
+            opacity: 0;
+            transition: opacity 0.5s 0.5s, transform 0.6s;
+        }
 
         /* Animations */
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .shake { animation: shake 0.4s ease-in-out; border-color: #ef4444 !important; background-color: #fef2f2 !important; }
-        @keyframes pop { 0% { transform: scale(0.9); opacity: 0;} 100% { transform: scale(1); opacity: 1;} }
-        .pop-in { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-        .float-anim { animation: float 3s ease-in-out infinite; }
-        @keyframes comboPop { 0% { transform: scale(1); } 50% { transform: scale(1.4); color: #ef4444; } 100% { transform: scale(1); } }
-        .combo-anim { animation: comboPop 0.5s ease-out; }
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .pop-in {
+            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .float-anim {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes comboPop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.4);
+                color: #ef4444;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .combo-anim {
+            animation: comboPop 0.5s ease-out;
+        }
 
         /* Map Path */
-        .path-line { position: absolute; background-color: #e2e8f0; width: 4px; z-index: 0; left: 50%; transform: translateX(-50%); }
-        .path-line.completed { background-color: #14b8a6; }
-        .map-node { position: relative; z-index: 10; }
+        .path-line {
+            position: absolute;
+            background-color: #e2e8f0;
+            width: 4px;
+            z-index: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .path-line.completed {
+            background-color: #14b8a6;
+        }
+
+        .map-node {
+            position: relative;
+            z-index: 10;
+        }
 
         /* Certificate Print Styles */
         @media print {
-            body * { visibility: hidden; }
-            #view-certificate, #view-certificate * { visibility: visible; }
-            #view-certificate { position: absolute; left: 0; top: 0; width: 100%; }
-            .no-print { display: none !important; }
-            #cert-container { border: none !important; box-shadow: none !important; }
+            body * {
+                visibility: hidden;
+            }
+
+            #view-certificate,
+            #view-certificate * {
+                visibility: visible;
+            }
+
+            #view-certificate {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            #cert-container {
+                border: none !important;
+                box-shadow: none !important;
+            }
         }
     </style>
 </head>
+
 <body class="text-gray-800 antialiased font-sans flex flex-col min-h-screen">
     <div class="bg-pattern-layer bg-pattern"></div>
 
@@ -173,15 +467,25 @@
     <nav id="main-nav" class="bg-white shadow-sm sticky top-0 z-50 hidden">
         <div class="w-full px-4 sm:px-6 md:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity" onclick="app.showView('home')">
+                <div class="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
+                    onclick="app.showView('home')">
                     <span class="text-2xl">🕌</span>
                     <span class="font-bold text-islamic-700 text-lg hidden sm:inline">My Salah Journey</span>
                 </div>
                 <div class="flex space-x-2 sm:space-x-4 items-center">
-                    <button onclick="app.showView('home')" class="text-gray-600 hover:text-islamic-600 font-medium px-2 py-1 rounded transition-colors flex items-center"><span class="mr-1">🏠</span> <span class="hidden sm:inline">Home</span></button>
-                    <button onclick="app.showView('map')" class="text-gray-600 hover:text-islamic-600 font-medium px-2 py-1 rounded transition-colors flex items-center"><span class="mr-1">🗺️</span> <span class="hidden sm:inline">Journey</span></button>
-                    <button onclick="app.showView('review')" class="text-gray-600 hover:text-islamic-600 font-medium px-2 py-1 rounded transition-colors flex items-center"><span class="mr-1">📖</span> <span class="hidden sm:inline">Review</span></button>
-                    <button onclick="app.logout()" class="text-gray-600 hover:text-red-500 font-medium px-2 py-1 rounded transition-colors flex items-center" title="Switch Student"><span class="mr-1">🚪</span> <span class="hidden sm:inline">Switch</span></button>
+                    <button onclick="app.showView('home')"
+                        class="text-gray-600 hover:text-islamic-600 font-medium px-2 py-1 rounded transition-colors flex items-center"><span
+                            class="mr-1">🏠</span> <span class="hidden sm:inline">Home</span></button>
+                    <button onclick="app.showView('map')"
+                        class="text-gray-600 hover:text-islamic-600 font-medium px-2 py-1 rounded transition-colors flex items-center"><span
+                            class="mr-1">🗺️</span> <span class="hidden sm:inline">Journey</span></button>
+                    <button onclick="app.showView('review')"
+                        class="text-gray-600 hover:text-islamic-600 font-medium px-2 py-1 rounded transition-colors flex items-center"><span
+                            class="mr-1">📖</span> <span class="hidden sm:inline">Review</span></button>
+                    <button onclick="app.logout()"
+                        class="text-gray-600 hover:text-red-500 font-medium px-2 py-1 rounded transition-colors flex items-center"
+                        title="Switch Student"><span class="mr-1">🚪</span> <span
+                            class="hidden sm:inline">Switch</span></button>
                 </div>
             </div>
         </div>
@@ -189,77 +493,113 @@
 
     <!-- Main Container (Full screen responsive) -->
     <main id="app-container" class="flex-grow w-full px-2 sm:px-4 md:px-6 py-1 sm:py-2 flex flex-col">
-        
+
         <!-- View 1: Login / Welcome -->
-        <section id="view-login" class="view-section active flex-grow flex flex-col items-center justify-center text-center">
-            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl max-w-4xl w-full pop-in border-t-4 border-islamic-500 relative overflow-hidden">
+        <section id="view-login"
+            class="view-section active flex-grow flex flex-col items-center justify-center text-center">
+            <div
+                class="bg-white p-6 md:p-8 rounded-2xl shadow-xl max-w-4xl w-full pop-in border-t-4 border-islamic-500 relative overflow-hidden">
 
                 <div class="absolute top-[-20px] right-[-20px] text-8xl opacity-10">🕌</div>
                 <div class="text-6xl mb-4 float-anim">🌙</div>
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">Assalamu Alaikum!</h1>
                 <p class="text-gray-600 mb-6 font-medium text-lg">Who is learning today?</p>
-                
+
                 <!-- Container for existing students -->
                 <div id="student-list-container" class="w-full flex flex-col items-center">
                     <!-- Profiles Grid -->
-                    <div id="profiles-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-4 max-h-[50vh] overflow-y-auto p-2 w-full">
+                    <div id="profiles-grid"
+                        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-4 max-h-[50vh] overflow-y-auto p-2 w-full">
                         <!-- Populated by JS -->
                     </div>
-                    
+
                     <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center mb-6">
-                        <button onclick="app.toggleAddStudentForm()" id="show-add-form-btn" class="bg-islamic-50 text-islamic-600 border border-islamic-200 hover:bg-islamic-100 font-bold py-3 px-6 rounded-xl flex items-center justify-center transition-colors shadow-sm text-base btn-press">
+                        <button onclick="app.toggleAddStudentForm()" id="show-add-form-btn"
+                            class="bg-islamic-50 text-islamic-600 border border-islamic-200 hover:bg-islamic-100 font-bold py-3 px-6 rounded-xl flex items-center justify-center transition-colors shadow-sm text-base btn-press">
                             <span class="text-2xl mr-2 leading-none">+</span> <span>Add Another Student</span>
                         </button>
-                        <button onclick="app.continueWithoutStudent()" class="bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 font-bold py-3 px-6 rounded-xl flex items-center justify-center transition-colors shadow-sm text-base btn-press" title="Start immediately without adding a student profile">
+                        <button onclick="app.continueWithoutStudent()"
+                            class="bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 font-bold py-3 px-6 rounded-xl flex items-center justify-center transition-colors shadow-sm text-base btn-press"
+                            title="Start immediately without adding a student profile">
                             <span class="mr-2 text-xl">⚡</span> <span>Continue Without Student</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Add New Student Form -->
-                <div id="add-student-container" class="bg-gray-50 p-4 rounded-xl border border-gray-200 w-full hidden mb-4">
+                <div id="add-student-container"
+                    class="bg-gray-50 p-4 rounded-xl border border-gray-200 w-full hidden mb-4">
                     <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wider text-left">Teacher: Add New Student</h3>
-                        <button onclick="app.toggleAddStudentForm()" id="cancel-add-btn" class="text-gray-400 hover:text-red-500 hidden transition-colors" title="Cancel">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wider text-left">Teacher: Add New
+                            Student</h3>
+                        <button onclick="app.toggleAddStudentForm()" id="cancel-add-btn"
+                            class="text-gray-400 hover:text-red-500 hidden transition-colors" title="Cancel">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
                         </button>
                     </div>
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                        <input type="text" id="new-student-name" placeholder="Enter student name..." class="flex-grow px-4 py-3 rounded-xl border-2 border-gray-200 focus:ring-0 focus:border-islamic-500 transition-colors outline-none font-bold text-center sm:text-left" dir="auto">
-                        <button onclick="app.createNewProfile()" class="bg-islamic-500 hover:bg-islamic-600 text-white font-bold py-3 px-6 rounded-xl shadow-[0_4px_0_0_#0f766e] btn-press">
+                        <input type="text" id="new-student-name" placeholder="Enter student name..."
+                            class="flex-grow px-4 py-3 rounded-xl border-2 border-gray-200 focus:ring-0 focus:border-islamic-500 transition-colors outline-none font-bold text-center sm:text-left"
+                            dir="auto">
+                        <button onclick="app.createNewProfile()"
+                            class="bg-islamic-500 hover:bg-islamic-600 text-white font-bold py-3 px-6 rounded-xl shadow-[0_4px_0_0_#0f766e] btn-press">
                             Add Student
                         </button>
-                        <button onclick="app.continueWithoutStudent()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-bold py-3 px-5 rounded-xl shadow-sm btn-press whitespace-nowrap" title="Start immediately without adding a student profile">
+                        <button onclick="app.continueWithoutStudent()"
+                            class="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-bold py-3 px-5 rounded-xl shadow-sm btn-press whitespace-nowrap"
+                            title="Start immediately without adding a student profile">
                             ⚡ Continue Without Student
                         </button>
                     </div>
                 </div>
-                
-                <div class="mt-4 border-t pt-4 text-sm text-gray-500 flex flex-col sm:flex-row items-center sm:justify-between space-y-3 sm:space-y-0 w-full">
-                    <button onclick="app.triggerImport()" class="hover:text-islamic-600 underline font-bold">⬇️ Import Class Data</button>
-                    <input type="file" id="import-file" class="hidden" accept=".json" onchange="app.importProgress(event)">
+
+                <div
+                    class="mt-4 border-t pt-4 text-sm text-gray-500 flex flex-col sm:flex-row items-center sm:justify-between space-y-3 sm:space-y-0 w-full">
+                    <button onclick="app.triggerImport()" class="hover:text-islamic-600 underline font-bold">⬇️ Import
+                        Class Data</button>
+                    <input type="file" id="import-file" class="hidden" accept=".json"
+                        onchange="app.importProgress(event)">
                 </div>
 
                 <!-- Teacher Info & Contacts -->
                 <div class="mt-6 bg-islamic-50 p-5 rounded-xl border border-islamic-100 flex flex-col items-center">
-                    <p class="text-islamic-900 font-bold font-sans text-xl mb-4 text-center">Designed & Prepared by: Teacher Ibrahim Salem</p>
-                    
+                    <p class="text-islamic-900 font-bold font-sans text-xl mb-4 text-center">Designed & Prepared by:
+                        Teacher Ibrahim Salem</p>
+
                     <div class="flex flex-wrap justify-center gap-3 w-full">
                         <!-- WhatsApp -->
-                        <a href="https://wa.me/201013145307" target="_blank" class="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.816 5.816 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+                        <a href="https://wa.me/201013145307" target="_blank"
+                            class="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.816 5.816 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+                            </svg>
                             <span class="font-sans" dir="ltr">010 1314 5307</span>
                         </a>
-                        
+
                         <!-- Telegram Channel -->
-                        <a href="https://t.me/IbrahimSalem_IslamicStudies" target="_blank" class="flex items-center space-x-2 bg-[#229ED9] hover:bg-[#1c84b5] text-white px-4 py-2 rounded-full font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.05-.309-.346-.11l-6.4 4.03-2.76-.864c-.6-.188-.612-.6.126-.89l10.81-4.17c.502-.18.956.123.82.87z"/></svg>
+                        <a href="https://t.me/IbrahimSalem_IslamicStudies" target="_blank"
+                            class="flex items-center space-x-2 bg-[#229ED9] hover:bg-[#1c84b5] text-white px-4 py-2 rounded-full font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.05-.309-.346-.11l-6.4 4.03-2.76-.864c-.6-.188-.612-.6.126-.89l10.81-4.17c.502-.18.956.123.82.87z" />
+                            </svg>
                             <span class="font-sans" dir="ltr">Telegram Channel</span>
                         </a>
 
                         <!-- Telegram Personal -->
-                        <a href="https://t.me/EngIbrahimSalem" target="_blank" class="flex items-center space-x-2 bg-[#229ED9] hover:bg-[#1c84b5] text-white px-4 py-2 rounded-full font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.05-.309-.346-.11l-6.4 4.03-2.76-.864c-.6-.188-.612-.6.126-.89l10.81-4.17c.502-.18.956.123.82.87z"/></svg>
+                        <a href="https://t.me/EngIbrahimSalem" target="_blank"
+                            class="flex items-center space-x-2 bg-[#229ED9] hover:bg-[#1c84b5] text-white px-4 py-2 rounded-full font-bold transition-all shadow-sm hover:shadow-md hover:-translate-y-1">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.05-.309-.346-.11l-6.4 4.03-2.76-.864c-.6-.188-.612-.6.126-.89l10.81-4.17c.502-.18.956.123.82.87z" />
+                            </svg>
                             <span class="font-sans" dir="ltr">@EngIbrahimSalem</span>
                         </a>
                     </div>
@@ -280,7 +620,7 @@
                         <!-- Filled dynamically -->
                     </div>
                 </div>
-                
+
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
                     <div class="bg-islamic-50 rounded-xl p-4 text-center border border-islamic-100">
                         <div class="text-3xl mb-1">⭐</div>
@@ -307,48 +647,66 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Journey Continue -->
-                <div class="lg:col-span-2 bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between border-t-4 border-islamic-500">
+                <div
+                    class="lg:col-span-2 bg-white rounded-2xl shadow-md p-6 flex flex-col justify-between border-t-4 border-islamic-500">
                     <div>
                         <div class="flex items-center space-x-3 mb-2">
                             <span class="text-3xl">🗺️</span>
                             <h3 class="text-xl font-bold">Continue Journey</h3>
                         </div>
-                        <p class="text-gray-600 mb-4 text-sm">Pick up where you left off and learn new Adhkar to complete your map.</p>
+                        <p class="text-gray-600 mb-4 text-sm">Pick up where you left off and learn new Adhkar to
+                            complete your map.</p>
                         <div class="flex justify-between text-sm font-bold text-islamic-700 mb-1">
                             <span>Overall Progress</span>
                             <span id="stat-progress">0%</span>
                         </div>
                         <div class="bg-gray-100 rounded-full h-4 w-full mb-6 overflow-hidden shadow-inner">
-                            <div id="home-progress-bar" class="bg-gradient-to-r from-islamic-400 to-islamic-600 h-full rounded-full transition-all duration-1000" style="width: 0%"></div>
+                            <div id="home-progress-bar"
+                                class="bg-gradient-to-r from-islamic-400 to-islamic-600 h-full rounded-full transition-all duration-1000"
+                                style="width: 0%"></div>
                         </div>
                     </div>
-                    <button onclick="app.showView('map')" class="w-full bg-islamic-500 hover:bg-islamic-600 text-white font-bold py-4 px-4 rounded-xl shadow-[0_4px_0_0_#0f766e] btn-press flex items-center justify-center space-x-2 text-lg">
+                    <button onclick="app.showView('map')"
+                        class="w-full bg-islamic-500 hover:bg-islamic-600 text-white font-bold py-4 px-4 rounded-xl shadow-[0_4px_0_0_#0f766e] btn-press flex items-center justify-center space-x-2 text-lg">
                         <span>Go to Map</span>
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
                     </button>
                 </div>
-                
+
                 <!-- Quick Modes -->
                 <div class="flex flex-col gap-4">
                     <!-- Certificate Button (Shown only when all stages are complete) -->
-                    <button id="btn-show-certificate" onclick="app.downloadCertificateDirect()" class="hidden bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 rounded-2xl shadow-md hover:shadow-lg p-5 items-center space-x-4 text-left border-2 border-amber-300 btn-press transition-all group">
-                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm shrink-0">🎓</div>
+                    <button id="btn-show-certificate" onclick="app.downloadCertificateDirect()"
+                        class="hidden bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 rounded-2xl shadow-md hover:shadow-lg p-5 items-center space-x-4 text-left border-2 border-amber-300 btn-press transition-all group">
+                        <div
+                            class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm shrink-0">
+                            🎓</div>
                         <div>
                             <h4 class="font-extrabold text-amber-950 text-lg sm:text-xl">Certificate</h4>
-                            <p class="text-xs sm:text-sm text-amber-900 mt-1 font-bold">All stages finished! Click to download Certificate PDF</p>
+                            <p class="text-xs sm:text-sm text-amber-900 mt-1 font-bold">All stages finished! Click to
+                                download Certificate PDF</p>
                         </div>
                     </button>
 
-                    <button onclick="app.startDailyChallenge()" class="bg-white rounded-2xl shadow-sm hover:shadow-md p-5 flex items-center space-x-4 text-left border border-gray-100 btn-press transition-all group">
-                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">🌟</div>
+                    <button onclick="app.startDailyChallenge()"
+                        class="bg-white rounded-2xl shadow-sm hover:shadow-md p-5 flex items-center space-x-4 text-left border border-gray-100 btn-press transition-all group">
+                        <div
+                            class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
+                            🌟</div>
                         <div>
                             <h4 class="font-bold text-gray-800">Daily Challenge</h4>
                             <p class="text-xs text-gray-500 mt-1">10 Mixed Questions</p>
                         </div>
                     </button>
-                    
-                    <button onclick="app.showView('review')" class="bg-white rounded-2xl shadow-sm hover:shadow-md p-5 flex items-center space-x-4 text-left border border-gray-100 btn-press transition-all group">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">📖</div>
+
+                    <button onclick="app.showView('review')"
+                        class="bg-white rounded-2xl shadow-sm hover:shadow-md p-5 flex items-center space-x-4 text-left border border-gray-100 btn-press transition-all group">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shrink-0">
+                            📖</div>
                         <div>
                             <h4 class="font-bold text-gray-800">Review Mode</h4>
                             <p class="text-xs text-gray-500 mt-1">Practice Old Adhkar</p>
@@ -361,29 +719,35 @@
             <div id="teacher-tools" class="hidden mt-12 p-4 bg-red-50 border border-red-200 rounded-xl">
                 <h4 class="font-bold text-red-700 mb-2">Teacher Mode Active</h4>
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="app.unlockAll()" class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">Unlock All</button>
-                    <button onclick="app.resetProgress()" class="bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900">Hard Reset</button>
-                    <button onclick="app.exportProgress()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">Export</button>
-                    <button onclick="app.showCertificate(true)" class="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700">Test Cert</button>
+                    <button onclick="app.unlockAll()"
+                        class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">Unlock All</button>
+                    <button onclick="app.resetProgress()"
+                        class="bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-900">Hard Reset</button>
+                    <button onclick="app.exportProgress()"
+                        class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">Export</button>
+                    <button onclick="app.showCertificate(true)"
+                        class="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700">Test
+                        Cert</button>
                 </div>
             </div>
         </section>
 
         <!-- View 3: Journey Map -->
         <section id="view-map" class="view-section flex-grow relative pb-20">
-            <div class="text-center mb-8 sticky top-16 bg-[#f8fafc] z-20 py-4 shadow-sm pb-4 rounded-b-xl border-b border-gray-200 bg-opacity-95 backdrop-blur-sm">
+            <div
+                class="text-center mb-8 sticky top-16 bg-[#f8fafc] z-20 py-4 shadow-sm pb-4 rounded-b-xl border-b border-gray-200 bg-opacity-95 backdrop-blur-sm">
                 <h2 class="text-3xl font-bold text-gray-800">Your Journey</h2>
                 <p class="text-gray-600">Complete stages to unlock the next level.</p>
             </div>
-            
+
             <div id="map-container" class="relative max-w-2xl mx-auto py-8 px-2 sm:px-4">
                 <!-- Nodes generated by JS -->
             </div>
 
             <!-- Certificate Button (Shown under all stages when complete) -->
             <div id="map-certificate-container" class="max-w-2xl mx-auto px-2 sm:px-4 mt-6 mb-12 hidden">
-                <button id="btn-map-certificate" onclick="app.downloadCertificateDirect()" 
-                        class="w-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-amber-950 font-black py-4 px-6 rounded-2xl shadow-lg border-2 border-amber-300 flex items-center justify-center gap-3 text-lg sm:text-xl transition-all btn-press cursor-pointer">
+                <button id="btn-map-certificate" onclick="app.downloadCertificateDirect()"
+                    class="w-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-amber-950 font-black py-4 px-6 rounded-2xl shadow-lg border-2 border-amber-300 flex items-center justify-center gap-3 text-lg sm:text-xl transition-all btn-press cursor-pointer">
                     <span class="text-2xl">🎓</span>
                     <span>Certificate</span>
                     <span class="text-2xl">📜</span>
@@ -392,41 +756,59 @@
         </section>
 
         <!-- View 4: Exercise Interface (Full Screen Layout - Zero Scrolling) -->
-        <section id="view-exercise" class="view-section flex-grow flex flex-col justify-between w-full h-full max-h-full overflow-hidden">
+        <section id="view-exercise"
+            class="view-section flex-grow flex flex-col justify-between w-full h-full max-h-full overflow-hidden">
             <!-- Header Status -->
-            <div class="flex justify-between items-center mb-1.5 sm:mb-2 bg-white px-3 py-2 rounded-2xl shadow-sm border border-gray-100 flex-wrap gap-2 w-full flex-shrink-0">
+            <div
+                class="flex justify-between items-center mb-1.5 sm:mb-2 bg-white px-3 py-2 rounded-2xl shadow-sm border border-gray-100 flex-wrap gap-2 w-full flex-shrink-0">
                 <div class="flex items-center space-x-2">
-                    <button onclick="app.showHomeFromExercise()" class="bg-gray-100 hover:bg-islamic-50 hover:text-islamic-700 text-gray-700 font-bold px-3 py-1.5 rounded-xl border border-gray-200 transition-colors flex items-center text-sm sm:text-base btn-press shadow-sm" title="Return to Main / Home Page">
+                    <button onclick="app.showHomeFromExercise()"
+                        class="bg-gray-100 hover:bg-islamic-50 hover:text-islamic-700 text-gray-700 font-bold px-3 py-1.5 rounded-xl border border-gray-200 transition-colors flex items-center text-sm sm:text-base btn-press shadow-sm"
+                        title="Return to Main / Home Page">
                         <span class="mr-1 text-base sm:text-lg">🏠</span> <span>Home</span>
                     </button>
-                    <button onclick="app.confirmExitStage()" class="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-gray-100 transition-colors" title="Exit Stage">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <button onclick="app.confirmExitStage()"
+                        class="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-gray-100 transition-colors"
+                        title="Exit Stage">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
                     </button>
                 </div>
-                
+
                 <div class="text-center flex-grow mx-2 hidden sm:flex flex-col items-center justify-center">
                     <div class="flex items-center justify-center gap-2 mb-0.5">
-                        <h3 id="ex-stage-title" class="font-extrabold text-base sm:text-lg text-gray-800">Stage Title</h3>
+                        <h3 id="ex-stage-title" class="font-extrabold text-base sm:text-lg text-gray-800">Stage Title
+                        </h3>
                         <span class="text-gray-300">•</span>
-                        <div id="ex-question-counter" class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-900 border border-emerald-300 font-extrabold text-xs sm:text-sm md:text-base px-3 py-0.5 rounded-xl shadow-sm whitespace-nowrap" title="Question Progress">
+                        <div id="ex-question-counter"
+                            class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-900 border border-emerald-300 font-extrabold text-xs sm:text-sm md:text-base px-3 py-0.5 rounded-xl shadow-sm whitespace-nowrap"
+                            title="Question Progress">
                             <span class="text-emerald-700">📝</span>
                             <span id="ex-counter-text" class="tracking-wide">Question 1 of 12</span>
                         </div>
                     </div>
                     <div class="w-full max-w-md bg-gray-200 rounded-full h-2 mt-1 overflow-hidden">
-                        <div id="ex-progress-bar" class="bg-gradient-to-r from-islamic-400 to-islamic-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        <div id="ex-progress-bar"
+                            class="bg-gradient-to-r from-islamic-400 to-islamic-600 h-2 rounded-full transition-all duration-300"
+                            style="width: 0%"></div>
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-2 sm:space-x-3">
                     <!-- Countdown Timer -->
-                    <div id="ex-timer-container" class="flex items-center space-x-1.5 bg-emerald-50 text-emerald-800 px-3 py-1.5 rounded-xl border border-emerald-200 font-extrabold text-sm sm:text-base shadow-sm" title="Activity Countdown Timer">
+                    <div id="ex-timer-container"
+                        class="flex items-center space-x-1.5 bg-emerald-50 text-emerald-800 px-3 py-1.5 rounded-xl border border-emerald-200 font-extrabold text-sm sm:text-base shadow-sm"
+                        title="Activity Countdown Timer">
                         <span class="text-base sm:text-lg">⏱️</span>
                         <span id="ex-timer-text" class="w-10 text-center font-mono">45s</span>
                     </div>
 
                     <!-- Teacher Skip Stage Button -->
-                    <button onclick="app.skipStage()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-3 py-1.5 rounded-xl border border-amber-300 text-xs sm:text-sm flex items-center gap-1 transition-all shadow-sm btn-press" title="Teacher: Skip entire stage">
+                    <button onclick="app.skipStage()"
+                        class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-3 py-1.5 rounded-xl border border-amber-300 text-xs sm:text-sm flex items-center gap-1 transition-all shadow-sm btn-press"
+                        title="Teacher: Skip entire stage">
                         <span>⏭️</span> <span>Skip</span>
                     </button>
 
@@ -436,24 +818,33 @@
                     </div>
 
                     <!-- Combo & Stars -->
-                    <div class="flex items-center space-x-1 bg-yellow-50 px-2.5 py-1.5 rounded-xl border border-yellow-200">
-                        <span id="ex-combo-text" class="font-bold text-red-500 mr-1 text-xs sm:text-sm hidden" dir="ltr">🔥x2</span>
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-islamic-gold fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    <div
+                        class="flex items-center space-x-1 bg-yellow-50 px-2.5 py-1.5 rounded-xl border border-yellow-200">
+                        <span id="ex-combo-text" class="font-bold text-red-500 mr-1 text-xs sm:text-sm hidden"
+                            dir="ltr">🔥x2</span>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-islamic-gold fill-current" viewBox="0 0 20 20">
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
+                        </svg>
                         <span id="ex-stars-earned" class="font-bold text-gray-700 text-sm sm:text-base">0</span>
                     </div>
 
                     <!-- Points -->
-                    <div class="flex items-center space-x-1 bg-blue-50 px-2.5 py-1.5 rounded-xl border border-blue-200" title="Total Points">
+                    <div class="flex items-center space-x-1 bg-blue-50 px-2.5 py-1.5 rounded-xl border border-blue-200"
+                        title="Total Points">
                         <span class="text-sm">💎</span>
                         <span id="ex-points" class="font-bold text-blue-700 text-sm sm:text-base">0</span>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Mobile Stage Title & Question Counter (shown only on small screens) -->
-            <div class="sm:hidden flex items-center justify-between px-2 mb-1 text-xs font-bold text-gray-700 flex-shrink-0">
+            <div
+                class="sm:hidden flex items-center justify-between px-2 mb-1 text-xs font-bold text-gray-700 flex-shrink-0">
                 <span id="ex-stage-title-mobile" class="truncate max-w-[50%]">Stage Title</span>
-                <div id="ex-counter-badge-mobile" class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-lg text-xs whitespace-nowrap shadow-sm">
+                <div id="ex-counter-badge-mobile"
+                    class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-lg text-xs whitespace-nowrap shadow-sm">
                     <span class="text-emerald-700">📝</span>
                     <span id="ex-counter-text-mobile">Question 1 of 12</span>
                 </div>
@@ -461,16 +852,19 @@
 
             <!-- Mobile progress bar (shown only on small screens) -->
             <div class="sm:hidden w-full bg-gray-200 rounded-full h-1.5 mb-2 flex-shrink-0">
-                <div id="ex-progress-bar-mobile" class="bg-islamic-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                <div id="ex-progress-bar-mobile" class="bg-islamic-500 h-1.5 rounded-full transition-all duration-300"
+                    style="width: 0%"></div>
             </div>
 
             <!-- Dynamic Content Area (Fills Available Screen Space - Zero Scrolling) -->
-            <div id="exercise-content-area" class="flex-grow min-h-0 flex flex-col justify-center items-center w-full my-auto overflow-hidden">
+            <div id="exercise-content-area"
+                class="flex-grow min-h-0 flex flex-col justify-center items-center w-full my-auto overflow-hidden">
                 <!-- Content injected by JS -->
             </div>
 
             <!-- Footer Controls with Previous, Next, and Action Buttons (English Only) -->
-            <div id="exercise-footer" class="mt-1.5 sm:mt-2 flex justify-between items-center w-full pb-1 gap-3 flex-shrink-0">
+            <div id="exercise-footer"
+                class="mt-1.5 sm:mt-2 flex justify-between items-center w-full pb-1 gap-3 flex-shrink-0">
                 <!-- Navigation buttons injected by JS -->
             </div>
         </section>
@@ -482,9 +876,10 @@
                 <h2 class="text-3xl font-bold text-gray-800">Review Library</h2>
                 <p class="text-gray-600">Revisit completed Adhkar to strengthen your memory.</p>
             </div>
-            
+
             <div class="flex justify-center space-x-4 mb-8">
-                <button onclick="app.startDailyChallenge()" class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-3 px-6 rounded-xl shadow-md btn-press flex items-center">
+                <button onclick="app.startDailyChallenge()"
+                    class="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-3 px-6 rounded-xl shadow-md btn-press flex items-center">
                     <span class="mr-2">🌟</span> <span>Mixed Quiz</span>
                 </button>
             </div>
@@ -497,28 +892,37 @@
         <!-- View 6: Certificate -->
         <section id="view-certificate" class="view-section flex-grow flex items-center justify-center">
             <div class="text-center w-full max-w-4xl">
-                <div id="cert-container" class="bg-white p-8 md:p-16 rounded-xl shadow-2xl relative overflow-hidden border-[12px] border-double border-islamic-200 m-4 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0yMCAwbDIwIDIwLTIwIDIwTDAgMjB6IiBmaWxsPSIjZTElNmM3IiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')]">
-                    
+                <div id="cert-container"
+                    class="bg-white p-8 md:p-16 rounded-xl shadow-2xl relative overflow-hidden border-[12px] border-double border-islamic-200 m-4 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0yMCAwbDIwIDIwLTIwIDIwTDAgMjB6IiBmaWxsPSIjZTElNmM3IiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')]">
+
                     <!-- Content -->
                     <div class="relative z-10 bg-white bg-opacity-95 p-8 rounded-lg">
                         <div class="mb-6">
-                            <span class="text-3xl md:text-4xl font-bold font-arabic text-islamic-900 inline-block" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span>
+                            <span class="text-3xl md:text-4xl font-bold font-arabic text-islamic-900 inline-block"
+                                dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span>
                         </div>
                         <div class="text-6xl text-islamic-gold mb-4 float-anim">🏆</div>
-                        <h1 class="text-4xl md:text-5xl font-bold text-islamic-900 tracking-widest font-serif uppercase mb-2">Certificate of Completion</h1>
+                        <h1
+                            class="text-4xl md:text-5xl font-bold text-islamic-900 tracking-widest font-serif uppercase mb-2">
+                            Certificate of Completion</h1>
                         <div class="h-1 w-32 bg-islamic-gold mx-auto my-6 rounded-full"></div>
                         <p class="text-xl text-gray-600 italic font-serif">This certificate is proudly presented to</p>
-                        <h2 id="cert-name" class="text-4xl md:text-5xl font-bold text-gray-800 mt-8 mb-4 pb-2 border-b-2 border-dashed border-gray-300 inline-block px-12 capitalize" dir="auto">Student Name</h2>
+                        <h2 id="cert-name"
+                            class="text-4xl md:text-5xl font-bold text-gray-800 mt-8 mb-4 pb-2 border-b-2 border-dashed border-gray-300 inline-block px-12 capitalize"
+                            dir="auto">Student Name</h2>
                         <p class="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed font-medium mt-4">
-                            By the grace of Allah, for successfully completing the memorization of all Adhkar related to Salah.
+                            By the grace of Allah, for successfully completing the memorization of all Adhkar related to
+                            Salah.
                         </p>
                         <div class="flex justify-between items-end mt-16 pt-8 max-w-xl mx-auto">
                             <div class="text-center">
                                 <p id="cert-date" class="text-lg font-bold border-b-2 border-gray-800 pb-1 w-40"></p>
-                                <p class="text-sm text-gray-500 mt-2 font-bold uppercase tracking-wider">Date Achieved</p>
+                                <p class="text-sm text-gray-500 mt-2 font-bold uppercase tracking-wider">Date Achieved
+                                </p>
                             </div>
                             <div class="text-center">
-                                <div class="w-24 h-24 bg-islamic-50 rounded-full border-4 border-islamic-gold flex items-center justify-center mx-auto shadow-inner">
+                                <div
+                                    class="w-24 h-24 bg-islamic-50 rounded-full border-4 border-islamic-gold flex items-center justify-center mx-auto shadow-inner">
                                     <span class="text-4xl">🌟</span>
                                 </div>
                                 <p class="text-sm text-islamic-700 font-bold mt-3 uppercase tracking-wider">Mastery</p>
@@ -526,18 +930,28 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mt-8 flex justify-center space-x-4 no-print flex-wrap gap-y-4">
-                    <button onclick="app.showView('home')" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition-colors btn-press">
+                    <button onclick="app.showView('home')"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition-colors btn-press">
                         Back to Home
                     </button>
-                    <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-colors flex items-center space-x-2 btn-press">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                    <button onclick="window.print()"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-colors flex items-center space-x-2 btn-press">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                            </path>
+                        </svg>
                         <span>Print (PDF)</span>
                     </button>
                     <!-- Download Certificate as PDF -->
-                    <button onclick="app.downloadCertificate()" id="download-cert-btn" class="bg-islamic-600 hover:bg-islamic-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-colors flex items-center space-x-2 btn-press">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <button onclick="app.downloadCertificate()" id="download-cert-btn"
+                        class="bg-islamic-600 hover:bg-islamic-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-colors flex items-center space-x-2 btn-press">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
                         <span>Download PDF</span>
                     </button>
                 </div>
@@ -548,23 +962,29 @@
 
     <!-- Overlay Modals -->
     <!-- Message Modal (replaces alert) -->
-    <div id="modal-message" class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center pop-in transform transition-all border-b-4 border-islamic-500">
+    <div id="modal-message"
+        class="fixed inset-0 bg-gray-900 bg-opacity-60 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div
+            class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center pop-in transform transition-all border-b-4 border-islamic-500">
             <div id="modal-icon" class="text-6xl mb-4 float-anim">ℹ️</div>
             <h3 id="modal-title" class="text-2xl font-bold mb-2 text-gray-800">Notice</h3>
             <p id="modal-text" class="text-gray-600 mb-8 text-lg font-medium">Message goes here.</p>
             <div class="flex justify-center" id="modal-actions">
-                <button onclick="app.closeModal()" class="w-full bg-islamic-500 hover:bg-islamic-600 text-white font-bold py-3 px-6 rounded-xl shadow-[0_4px_0_0_#0f766e] btn-press text-lg">Continue</button>
+                <button onclick="app.closeModal()"
+                    class="w-full bg-islamic-500 hover:bg-islamic-600 text-white font-bold py-3 px-6 rounded-xl shadow-[0_4px_0_0_#0f766e] btn-press text-lg">Continue</button>
             </div>
         </div>
     </div>
 
     <!-- Celebration Overlay -->
-    <div id="celebration-overlay" class="fixed inset-0 pointer-events-none z-[200] hidden overflow-hidden flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity duration-300">
+    <div id="celebration-overlay"
+        class="fixed inset-0 pointer-events-none z-[200] hidden overflow-hidden flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity duration-300">
         <div class="text-center pop-in relative z-10 bg-white p-12 rounded-3xl shadow-2xl border-4 border-yellow-400">
             <div class="text-8xl mb-4 float-anim">🌟</div>
-            <h2 class="text-4xl font-extrabold text-gray-800 drop-shadow-sm mb-2" id="celebration-text">Stage Complete!</h2>
-            <div class="text-2xl text-islamic-600 font-bold drop-shadow-sm bg-islamic-50 px-6 py-2 rounded-full inline-flex items-center gap-2 border border-islamic-100">
+            <h2 class="text-4xl font-extrabold text-gray-800 drop-shadow-sm mb-2" id="celebration-text">Stage Complete!
+            </h2>
+            <div
+                class="text-2xl text-islamic-600 font-bold drop-shadow-sm bg-islamic-50 px-6 py-2 rounded-full inline-flex items-center gap-2 border border-islamic-100">
                 <span dir="ltr">+ <span id="celebration-stars">3</span></span>
                 <span>Stars Earned</span>
             </div>
@@ -578,90 +998,90 @@
             {
                 id: 1, title: "Stage 1 — Takbeerat Al-Ihraam",
                 positionName: "Takbeer (Standing)",
-                image: "صور/Image 1 — Takbeer (standing position)..png",
+                image: "image/Image 1 — Takbeer (standing position)..png",
                 arabic: "اللهُ أَكْبَرُ", franco: "Allahu Akbar", english: "Allah is the Greatest.",
-                chunks: [{ ar: "اللهُ أَكْبَرُ", fr: "Allahu Akbar", en: "Allah is the Greatest." }]
+                chunks: [{ar: "اللهُ أَكْبَرُ", fr: "Allahu Akbar", en: "Allah is the Greatest."}]
             },
             {
                 id: 2, title: "Stage 2 — Opening Du'a",
                 positionName: "Standing",
-                image: "صور/Image 2 — Standing position.png",
+                image: "image/Image 2 — Standing position.png",
                 arabic: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبَارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلَا إِلَهَ غَيْرُكَ.",
                 franco: "Subhanaka Allahumma wa bihamdika, wa tabarakasmuka, wa ta'ala jadduka, wa la ilaha ghayruk.",
                 english: "Glory is to You, O Allah, and all praise. Blessed is Your Name, exalted is Your Majesty, and there is no deity worthy of worship except You.",
                 chunks: [
-                    { ar: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ،", fr: "Subhanaka Allahumma wa bihamdik,", en: "Glory is to You, O Allah, and all praise." },
-                    { ar: "وَتَبَارَكَ اسْمُكَ،", fr: "wa tabarakasmuk,", en: "Blessed is Your Name," },
-                    { ar: "وَتَعَالَى جَدُّكَ، وَلَا إِلَهَ غَيْرُكَ.", fr: "wa ta'ala jadduk, wa la ilaha ghayruk.", en: "exalted is Your Majesty, and there is no deity worthy of worship except You." }
+                    {ar: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ،", fr: "Subhanaka Allahumma wa bihamdik,", en: "Glory is to You, O Allah, and all praise."},
+                    {ar: "وَتَبَارَكَ اسْمُكَ،", fr: "wa tabarakasmuk,", en: "Blessed is Your Name,"},
+                    {ar: "وَتَعَالَى جَدُّكَ، وَلَا إِلَهَ غَيْرُكَ.", fr: "wa ta'ala jadduk, wa la ilaha ghayruk.", en: "exalted is Your Majesty, and there is no deity worthy of worship except You."}
                 ]
             },
             {
                 id: 3, title: "Stage 3 — Seeking Protection",
                 positionName: "Standing",
-                image: "صور/Image 2 — Standing position.png",
+                image: "image/Image 2 — Standing position.png",
                 arabic: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ.", franco: "A'udhu billahi min ash-shaytan ir-rajim.", english: "I seek refuge in Allah from Satan, the accursed.",
-                chunks: [{ ar: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ.", fr: "A'udhu billahi min ash-shaytan ir-rajim.", en: "I seek refuge in Allah from Satan, the accursed." }]
+                chunks: [{ar: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ.", fr: "A'udhu billahi min ash-shaytan ir-rajim.", en: "I seek refuge in Allah from Satan, the accursed."}]
             },
             {
                 id: 4, title: "Stage 4 — Basmalah",
                 positionName: "Standing",
-                image: "صور/Image 2 — Standing position.png",
+                image: "image/Image 2 — Standing position.png",
                 arabic: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ", franco: "Bismillahir-Rahmanir-Rahim.", english: "In the name of Allāh, the Entirely Merciful, the Especially Merciful.",
-                chunks: [{ ar: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ", fr: "Bismillahir-Rahmanir-Rahim.", en: "In the name of Allāh, the Entirely Merciful, the Especially Merciful." }]
+                chunks: [{ar: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ", fr: "Bismillahir-Rahmanir-Rahim.", en: "In the name of Allāh, the Entirely Merciful, the Especially Merciful."}]
             },
             {
                 id: 5, title: "Stage 5 — Surah Al-Fatihah",
                 positionName: "Standing",
-                image: "صور/Image 2 — Standing position.png",
+                image: "image/Image 2 — Standing position.png",
                 arabic: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ\nٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ\nٱلرَّحْمَـٰنِ ٱلرَّحِيمِ\nمَـٰلِكِ يَوْمِ ٱلدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ\nصِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ\nآمِينَ",
                 franco: "Bismillahir-Rahmanir-Rahim.\nAlhamdu lillahi Rabbil-'alamin.\nAr-Rahmanir-Rahim.\nMaliki Yawmid-Din.\nIyyaka na'budu wa iyyaka nasta'in.\nIhdinas-siratal-mustaqim.\nSiratal-ladhina an'amta 'alayhim ghayril-maghdubi 'alayhim wa lad-dallin.\nAmeen",
                 english: "In the name of Allāh, the Entirely Merciful, the Especially Merciful.\n[All] praise is [due] to Allāh, Lord of the worlds -\nThe Entirely Merciful, the Especially Merciful,\nSovereign of the Day of Recompense.\nIt is You we worship and You we ask for help.\nGuide us to the straight path -\nThe path of those upon whom You have bestowed favor, not of those who have earned [Your] anger or of those who are astray.\nAmen (O Allah, answer our prayer).",
                 chunks: [
-                    { 
-                        ar: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ", 
-                        fr: "Bismillahir-Rahmanir-Rahim.", 
+                    {
+                        ar: "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+                        fr: "Bismillahir-Rahmanir-Rahim.",
                         en: "In the name of Allāh, the Entirely Merciful, the Especially Merciful.",
                         tafsir: "We begin reciting with the Name of Allāh, seeking His blessing. Allāh is the One and Only true God, full of mercy (Ar-Rahman) and showing mercy (Ar-Rahim) to His creation."
                     },
-                    { 
-                        ar: "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ", 
-                        fr: "Alhamdu lillahi Rabbil-'alamin.", 
+                    {
+                        ar: "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ",
+                        fr: "Alhamdu lillahi Rabbil-'alamin.",
                         en: "[All] praise is [due] to Allāh, Lord of the worlds -",
                         tafsir: "All perfect praise and gratitude belong exclusively to Allāh, the Creator, Provider, Sustainer, and Lord of all the worlds and creation."
                     },
-                    { 
-                        ar: "ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ", 
-                        fr: "Ar-Rahmanir-Rahim.", 
+                    {
+                        ar: "ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ",
+                        fr: "Ar-Rahmanir-Rahim.",
                         en: "The Entirely Merciful, the Especially Merciful,",
                         tafsir: "Reaffirming Allāh's boundless mercy that encompasses all creation, and His special mercy bestowed upon believers in the Hereafter."
                     },
-                    { 
-                        ar: "مَـٰلِكِ يَوْمِ ٱلدِّينِ", 
-                        fr: "Maliki Yawmid-Din.", 
+                    {
+                        ar: "مَـٰلِكِ يَوْمِ ٱلدِّينِ",
+                        fr: "Maliki Yawmid-Din.",
                         en: "Sovereign of the Day of Recompense.",
                         tafsir: "Allāh is the Sole Master, King, and Judge on the Day of Judgment (the Day of Resurrection), when everyone will be justly recompensed for their deeds."
                     },
-                    { 
-                        ar: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", 
-                        fr: "Iyyaka na'budu wa iyyaka nasta'in.", 
+                    {
+                        ar: "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+                        fr: "Iyyaka na'budu wa iyyaka nasta'in.",
                         en: "It is You we worship and You we ask for help.",
                         tafsir: "The core of Monotheism (Tawhid): We dedicate all worship to You alone, O Allāh, and we rely completely on Your divine help alone in all our affairs."
                     },
-                    { 
-                        ar: "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ", 
-                        fr: "Ihdinas-siratal-mustaqim.", 
+                    {
+                        ar: "ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ",
+                        fr: "Ihdinas-siratal-mustaqim.",
                         en: "Guide us to the straight path -",
                         tafsir: "The greatest supplication: Asking Allāh to guide us, inspire us, and keep us firm on the Straight Path of Islam, truth, and righteousness."
                     },
-                    { 
-                        ar: "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ", 
-                        fr: "Siratal-ladhina an'amta 'alayhim ghayril-maghdubi 'alayhim wa lad-dallin.", 
+                    {
+                        ar: "صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+                        fr: "Siratal-ladhina an'amta 'alayhim ghayril-maghdubi 'alayhim wa lad-dallin.",
                         en: "The path of those upon whom You have bestowed favor, not of those who have earned [Your] anger or of those who are astray.",
                         tafsir: "The path of the Prophets, truthful, martyrs, and righteous; not the path of those who knew the truth but rebelled, nor those who went astray through ignorance."
                     },
-                    { 
-                        ar: "آمِينَ", 
-                        fr: "Ameen.", 
+                    {
+                        ar: "آمِينَ",
+                        fr: "Ameen.",
                         en: "Amen (O Allah, answer our prayer).",
                         tafsir: "Recommended (Sunnah) to say at the conclusion of reciting Surah Al-Fatihah in prayer, meaning 'O Allāh, graciously answer our prayer'."
                     }
@@ -670,47 +1090,47 @@
             {
                 id: 6, title: "Stage 6 — Ruku'",
                 positionName: "Ruku'",
-                image: "صور/Image 3 — Ruku' (bowing position). This image should be used for Ruku'..jpg",
+                image: "image/Image 3 — Ruku' (bowing position). This image should be used for Ruku'..jpg",
                 arabic: "سُبْحَانَ رَبِّيَ الْعَظِيمِ", franco: "Subhana Rabbiyal-'Adheem.", english: "Glory is to my Lord, the Most Great.",
                 transitionInfo: "Remember: Say 'Allahu Akbar' as you bow down.",
-                chunks: [{ ar: "سُبْحَانَ رَبِّيَ الْعَظِيمِ", fr: "Subhana Rabbiyal-'Adheem.", en: "Glory is to my Lord, the Most Great." }]
+                chunks: [{ar: "سُبْحَانَ رَبِّيَ الْعَظِيمِ", fr: "Subhana Rabbiyal-'Adheem.", en: "Glory is to my Lord, the Most Great."}]
             },
             {
                 id: 7, title: "Stage 7 — Rising from Ruku'",
                 positionName: "Standing after Ruku'",
-                image: "صور/Image 2 — Standing position.png",
+                image: "image/Image 2 — Standing position.png",
                 arabic: "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ\nرَبَّنَا وَلَكَ الْحَمْدُ",
                 franco: "Sami'Allahu liman hamidah.\nRabbana wa lakal-hamd.",
                 english: "Allah hears whoever praises Him.\nOur Lord, to You belongs all praise.",
                 chunks: [
-                    { ar: "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ", fr: "Sami'Allahu liman hamidah.", en: "Allah hears whoever praises Him." },
-                    { ar: "رَبَّنَا وَلَكَ الْحَمْدُ", fr: "Rabbana wa lakal-hamd.", en: "Our Lord, to You belongs all praise." }
+                    {ar: "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ", fr: "Sami'Allahu liman hamidah.", en: "Allah hears whoever praises Him."},
+                    {ar: "رَبَّنَا وَلَكَ الْحَمْدُ", fr: "Rabbana wa lakal-hamd.", en: "Our Lord, to You belongs all praise."}
                 ]
             },
             {
                 id: 8, title: "Stage 8 — Sujood",
                 positionName: "Sujood",
-                image: "صور/Image 4 — Sujood (Prostration Position).jpg",
+                image: "image/Image 4 — Sujood (Prostration Position).jpg",
                 arabic: "سُبْحَانَ رَبِّيَ الْأَعْلَى", franco: "Subhana Rabbiyal-A'la.", english: "Glory is to my Lord, the Most High.",
                 transitionInfo: "Remember: Say 'Allahu Akbar' as you go down to prostrate.",
-                chunks: [{ ar: "سُبْحَانَ رَبِّيَ الْأَعْلَى", fr: "Subhana Rabbiyal-A'la.", en: "Glory is to my Lord, the Most High." }]
+                chunks: [{ar: "سُبْحَانَ رَبِّيَ الْأَعْلَى", fr: "Subhana Rabbiyal-A'la.", en: "Glory is to my Lord, the Most High."}]
             },
             {
                 id: 9, title: "Stage 9 — Between the Two Sujoods",
                 positionName: "Sitting between the two Sujoods",
-                image: "صور/Image 5 — Sitting Between the Two Sujoods.jpg",
+                image: "image/Image 5 — Sitting Between the Two Sujoods.jpg",
                 arabic: "رَبِّ اغْفِرْ لِي", franco: "Rabbighfir li.", english: "My Lord, forgive me.",
-                chunks: [{ ar: "رَبِّ اغْفِرْ لِي", fr: "Rabbighfir li.", en: "My Lord, forgive me." }]
+                chunks: [{ar: "رَبِّ اغْفِرْ لِي", fr: "Rabbighfir li.", en: "My Lord, forgive me."}]
             },
             {
                 id: 10, title: "Stage 10 — Second Sujood",
                 positionName: "Second Sujood",
-                image: "صور/Image 4 — Sujood (Prostration Position).jpg",
+                image: "image/Image 4 — Sujood (Prostration Position).jpg",
                 arabic: "سُبْحَانَ رَبِّيَ الْأَعْلَى", franco: "Subhana Rabbiyal-A'la.", english: "Glory is to my Lord, the Most High.",
                 transitionInfo: "After sitting and asking for forgiveness, say 'Allahu Akbar' and prostrate for the Second Sujood.",
-                chunks: [{ 
-                    ar: "سُبْحَانَ رَبِّيَ الْأَعْلَى", 
-                    fr: "Subhana Rabbiyal-A'la.", 
+                chunks: [{
+                    ar: "سُبْحَانَ رَبِّيَ الْأَعْلَى",
+                    fr: "Subhana Rabbiyal-A'la.",
                     en: "Glory is to my Lord, the Most High.",
                     tafsir: "Repeated at least three times during the second prostration, praising Allah the Most High in the humblest position before rising."
                 }]
@@ -718,53 +1138,53 @@
             {
                 id: 11, title: "Stage 11 — Tashahhud",
                 positionName: "Tashahhud",
-                image: "صور/Image 6 — Tashahhud Sitting Position.jpg",
+                image: "image/Image 6 — Tashahhud Sitting Position.jpg",
                 arabic: "التَّحِيَّاتُ لِلَّهِ، وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ.",
                 franco: "At-tahiyyatu lillahi was-salawatu wat-tayyibat.\nAs-salamu 'alayka ayyuhan-nabiyyu wa rahmatullahi wa barakatuh.\nAs-salamu 'alayna wa 'ala 'ibadillahis-salihin.\nAsh-hadu alla ilaha illallah, wa ash-hadu anna Muhammadan 'abduhu wa rasuluh.",
                 english: "All compliments, prayers, and pure words are due to Allah.\nPeace be upon you, O Prophet, and the mercy of Allah and His blessings.\nPeace be upon us and upon the righteous servants of Allah.\nI bear witness that there is no deity worthy of worship except Allah, and I bear witness that Muhammad is His servant and His Messenger.",
                 chunks: [
-                    { ar: "التَّحِيَّاتُ لِلَّهِ، وَالصَّلَوَاتُ وَالطَّيِّبَاتُ،", fr: "At-tahiyyatu lillahi was-salawatu wat-tayyibat.", en: "All compliments, prayers, and pure words are due to Allah." },
-                    { ar: "السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ،", fr: "As-salamu 'alayka ayyuhan-nabiyyu wa rahmatullahi wa barakatuh.", en: "Peace be upon you, O Prophet, and the mercy of Allah and His blessings." },
-                    { ar: "السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ،", fr: "As-salamu 'alayna wa 'ala 'ibadillahis-salihin.", en: "Peace be upon us and upon the righteous servants of Allah." },
-                    { ar: "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ،", fr: "Ash-hadu alla ilaha illallah,", en: "I bear witness that there is no deity worthy of worship except Allah," },
-                    { ar: "وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ.", fr: "wa ash-hadu anna Muhammadan 'abduhu wa rasuluh.", en: "and I bear witness that Muhammad is His servant and His Messenger." }
+                    {ar: "التَّحِيَّاتُ لِلَّهِ، وَالصَّلَوَاتُ وَالطَّيِّبَاتُ،", fr: "At-tahiyyatu lillahi was-salawatu wat-tayyibat.", en: "All compliments, prayers, and pure words are due to Allah."},
+                    {ar: "السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ،", fr: "As-salamu 'alayka ayyuhan-nabiyyu wa rahmatullahi wa barakatuh.", en: "Peace be upon you, O Prophet, and the mercy of Allah and His blessings."},
+                    {ar: "السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ،", fr: "As-salamu 'alayna wa 'ala 'ibadillahis-salihin.", en: "Peace be upon us and upon the righteous servants of Allah."},
+                    {ar: "أَشْهَدُ أَنْ لَا إِلَهَ إِلَّا اللَّهُ،", fr: "Ash-hadu alla ilaha illallah,", en: "I bear witness that there is no deity worthy of worship except Allah,"},
+                    {ar: "وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ.", fr: "wa ash-hadu anna Muhammadan 'abduhu wa rasuluh.", en: "and I bear witness that Muhammad is His servant and His Messenger."}
                 ]
             },
             {
                 id: 12, title: "Stage 12 — Salat Ibrahimiyyah",
                 positionName: "Tashahhud",
-                image: "صور/Image 6 — Tashahhud Sitting Position.jpg",
+                image: "image/Image 6 — Tashahhud Sitting Position.jpg",
                 arabic: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ.\nاللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ.",
                 franco: "Allahumma salli 'ala Muhammad wa 'ala ali Muhammad, kama sallayta 'ala Ibrahim wa 'ala ali Ibrahim, innaka Hamidun Majid.\nAllahumma barik 'ala Muhammad wa 'ala ali Muhammad, kama barakta 'ala Ibrahim wa 'ala ali Ibrahim, innaka Hamidun Majid.",
                 english: "O Allah, send blessings upon Muhammad and upon the family of Muhammad, as You sent blessings upon Ibrahim and upon the family of Ibrahim. Indeed, You are Praiseworthy, Glorious.\nO Allah, send grace upon Muhammad and upon the family of Muhammad, as You sent grace upon Ibrahim and upon the family of Ibrahim. Indeed, You are Praiseworthy, Glorious.",
                 chunks: [
-                    { ar: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ،", fr: "Allahumma salli 'ala Muhammad wa 'ala ali Muhammad,", en: "O Allah, send blessings upon Muhammad and upon the family of Muhammad," },
-                    { ar: "كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ.", fr: "kama sallayta 'ala Ibrahim wa 'ala ali Ibrahim, innaka Hamidun Majid.", en: "as You sent blessings upon Ibrahim and upon the family of Ibrahim. Indeed, You are Praiseworthy, Glorious." },
-                    { ar: "اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ،", fr: "Allahumma barik 'ala Muhammad wa 'ala ali Muhammad,", en: "O Allah, send grace upon Muhammad and upon the family of Muhammad," },
-                    { ar: "كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ.", fr: "kama barakta 'ala Ibrahim wa 'ala ali Ibrahim, innaka Hamidun Majid.", en: "as You sent grace upon Ibrahim and upon the family of Ibrahim. Indeed, You are Praiseworthy, Glorious." }
-                ] 
+                    {ar: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ،", fr: "Allahumma salli 'ala Muhammad wa 'ala ali Muhammad,", en: "O Allah, send blessings upon Muhammad and upon the family of Muhammad,"},
+                    {ar: "كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ.", fr: "kama sallayta 'ala Ibrahim wa 'ala ali Ibrahim, innaka Hamidun Majid.", en: "as You sent blessings upon Ibrahim and upon the family of Ibrahim. Indeed, You are Praiseworthy, Glorious."},
+                    {ar: "اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ،", fr: "Allahumma barik 'ala Muhammad wa 'ala ali Muhammad,", en: "O Allah, send grace upon Muhammad and upon the family of Muhammad,"},
+                    {ar: "كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ.", fr: "kama barakta 'ala Ibrahim wa 'ala ali Ibrahim, innaka Hamidun Majid.", en: "as You sent grace upon Ibrahim and upon the family of Ibrahim. Indeed, You are Praiseworthy, Glorious."}
+                ]
             },
             {
                 id: 13, title: "Stage 13 — Du'a Before Salam",
                 positionName: "Tashahhud",
-                image: "صور/Image 6 — Tashahhud Sitting Position.jpg",
+                image: "image/Image 6 — Tashahhud Sitting Position.jpg",
                 arabic: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَهَنَّمَ، وَمِنْ عَذَابِ الْقَبْرِ، وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ، وَمِنْ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ.",
                 franco: "Allahumma inni a'udhu bika min 'adhabi Jahannam, wa min 'adhabil-qabr, wa min fitnatil-mahya wal-mamat, wa min fitnatil-Masihid-Dajjal.",
                 english: "O Allah, I seek refuge in You from the punishment of Hellfire, and from the punishment of the grave, and from the trials of life and death, and from the evil trial of the False Messiah.",
                 chunks: [
-                    { ar: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَهَنَّمَ،", fr: "Allahumma inni a'udhu bika min 'adhabi Jahannam,", en: "O Allah, I seek refuge in You from the punishment of Hellfire," },
-                    { ar: "وَمِنْ عَذَابِ الْقَبْرِ،", fr: "wa min 'adhabil-qabr,", en: "and from the punishment of the grave," },
-                    { ar: "وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ،", fr: "wa min fitnatil-mahya wal-mamat,", en: "and from the trials of life and death," },
-                    { ar: "وَمِنْ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ.", fr: "wa min fitnatil-Masihid-Dajjal.", en: "and from the evil trial of the False Messiah." }
+                    {ar: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَهَنَّمَ،", fr: "Allahumma inni a'udhu bika min 'adhabi Jahannam,", en: "O Allah, I seek refuge in You from the punishment of Hellfire,"},
+                    {ar: "وَمِنْ عَذَابِ الْقَبْرِ،", fr: "wa min 'adhabil-qabr,", en: "and from the punishment of the grave,"},
+                    {ar: "وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ،", fr: "wa min fitnatil-mahya wal-mamat,", en: "and from the trials of life and death,"},
+                    {ar: "وَمِنْ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ.", fr: "wa min fitnatil-Masihid-Dajjal.", en: "and from the evil trial of the False Messiah."}
                 ]
             },
             {
                 id: 14, title: "Stage 14 — Tasleem",
                 positionName: "Salam",
-                image: "صور/Image 7 — Tasleem (Ending the Prayer).jfif",
+                image: "image/Image 7 — Tasleem (Ending the Prayer).jfif",
                 arabic: "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ", franco: "As-salamu 'alaykum wa rahmatullah.", english: "May the peace and mercy of Allah be upon you.",
                 transitionInfo: "Turn your head to the right, then repeat turning to the left.",
-                chunks: [{ ar: "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ", fr: "As-salamu 'alaykum wa rahmatullah.", en: "May the peace and mercy of Allah be upon you." }]
+                chunks: [{ar: "السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ", fr: "As-salamu 'alaykum wa rahmatullah.", en: "May the peace and mercy of Allah be upon you."}]
             }
         ];
 
@@ -833,7 +1253,7 @@
                 this.loadUsers();
                 this.renderProfiles();
                 this.showView('login');
-                
+
                 const input = document.getElementById('new-student-name');
                 if (input) {
                     input.addEventListener('keypress', (e) => {
@@ -848,7 +1268,7 @@
                 }
                 try {
                     localStorage.setItem('salahJourney_multi_users', JSON.stringify(this.users));
-                } catch(e) {
+                } catch (e) {
                     console.error("Error saving progress to localStorage", e);
                 }
             },
@@ -863,13 +1283,13 @@
                             Object.keys(parsed).forEach(k => {
                                 const u = parsed[k];
                                 if (u && typeof u === 'object' && typeof u.name === 'string' && u.name.trim().length > 0) {
-                                    this.users[k] = { ...this.getDefaultState(), ...u };
+                                    this.users[k] = {...this.getDefaultState(), ...u};
                                 }
                             });
                         }
-                    } catch(e) { 
-                        console.error("Error loading users", e); 
-                        this.users = {}; 
+                    } catch (e) {
+                        console.error("Error loading users", e);
+                        this.users = {};
                     }
                 }
             },
@@ -880,12 +1300,12 @@
                 this.state.name = "Student";
                 this.showView('home');
             },
-            
+
             toggleAddStudentForm() {
                 const addContainer = document.getElementById('add-student-container');
                 const showAddBtn = document.getElementById('show-add-form-btn');
                 if (!addContainer) return;
-                
+
                 if (addContainer.classList.contains('hidden')) {
                     addContainer.classList.remove('hidden');
                     if (showAddBtn) showAddBtn.classList.add('hidden');
@@ -906,13 +1326,13 @@
                 const addContainer = document.getElementById('add-student-container');
                 const showAddBtn = document.getElementById('show-add-form-btn');
                 const cancelBtn = document.getElementById('cancel-add-btn');
-                
+
                 grid.innerHTML = '';
                 const userIds = Object.keys(this.users || {}).filter(id => {
                     const u = this.users[id];
                     return u && typeof u === 'object' && typeof u.name === 'string' && u.name.trim().length > 0;
                 });
-                
+
                 if (userIds.length === 0) {
                     if (listContainer) listContainer.classList.add('hidden');
                     if (addContainer) addContainer.classList.remove('hidden');
@@ -954,17 +1374,17 @@
                     this.showMessage("Please enter the student's name first.", "Name Required");
                     return;
                 }
-                
+
                 const newId = 'user_' + Date.now();
                 this.users[newId] = this.getDefaultState();
                 this.users[newId].name = name;
-                
+
                 this.saveProgress();
                 input.value = '';
                 this.renderProfiles();
-                
-                const msg = name.toUpperCase() === 'TEACHER' ? 
-                    "Teacher account added. This account has access to debug tools." : 
+
+                const msg = name.toUpperCase() === 'TEACHER' ?
+                    "Teacher account added. This account has access to debug tools." :
                     name + " has been added successfully! Click their card to start playing.";
                 this.showMessage(msg, "Student Added");
             },
@@ -973,7 +1393,7 @@
                 if (!this.users[id]) return;
                 this.currentUserId = id;
                 this.state = this.users[id];
-                
+
                 const teacherTools = document.getElementById('teacher-tools');
                 if (teacherTools) {
                     if (this.state.name && this.state.name.toUpperCase() === 'TEACHER') {
@@ -982,29 +1402,29 @@
                         teacherTools.classList.add('hidden');
                     }
                 }
-                
-                if(!this.state.badges) this.state.badges = [];
-                if(!this.state.maxCombo) this.state.maxCombo = 0;
+
+                if (!this.state.badges) this.state.badges = [];
+                if (!this.state.maxCombo) this.state.maxCombo = 0;
 
                 if (this.state.completedStages.length === 0 && !this.state.badges.find(b => b.id === 'first_step')) {
                     this.awardBadge('first_step', '🌟 First Step');
                     this.saveProgress();
                 }
-                
+
                 this.showView('home');
             },
 
             deleteProfile(id, event) {
                 if (event) event.stopPropagation();
-                if(!this.users[id]) return;
-                if(confirm("Are you sure you want to delete the profile for " + this.users[id].name + "? All their progress and stars will be lost forever.")) {
+                if (!this.users[id]) return;
+                if (confirm("Are you sure you want to delete the profile for " + this.users[id].name + "? All their progress and stars will be lost forever.")) {
                     delete this.users[id];
-                    if(this.currentUserId === id) this.currentUserId = null;
+                    if (this.currentUserId === id) this.currentUserId = null;
                     this.saveProgress();
                     this.renderProfiles();
                 }
             },
-            
+
             logout() {
                 this.currentUserId = null;
                 this.state = this.getDefaultState();
@@ -1018,7 +1438,7 @@
                 if (targetView) {
                     targetView.classList.add('active');
                 }
-                
+
                 const nav = document.getElementById('main-nav');
                 if (nav) {
                     if (viewId === 'login' || viewId === 'exercise' || viewId === 'certificate') {
@@ -1034,11 +1454,11 @@
                     document.body.classList.remove('exercise-active');
                 }
 
-                if(viewId === 'home') this.updateDashboard();
-                if(viewId === 'map') this.renderMap();
-                if(viewId === 'review') this.renderReviewList();
-                if(viewId === 'certificate') this.generateCertificate();
-                
+                if (viewId === 'home') this.updateDashboard();
+                if (viewId === 'map') this.renderMap();
+                if (viewId === 'review') this.renderReviewList();
+                if (viewId === 'certificate') this.generateCertificate();
+
                 window.scrollTo(0, 0);
             },
 
@@ -1055,23 +1475,23 @@
 
                 const greetingEl = document.getElementById('home-greeting');
                 if (greetingEl) greetingEl.textContent = "Assalamu Alaikum, " + (this.state.name || "Student") + "!";
-                
+
                 const starsEl = document.getElementById('stat-stars');
                 if (starsEl) starsEl.textContent = this.state.stars;
-                
+
                 const pointsEl = document.getElementById('stat-points');
                 if (pointsEl) pointsEl.textContent = this.state.points;
-                
+
                 const stagesEl = document.getElementById('stat-stages');
                 if (stagesEl) stagesEl.textContent = this.state.completedStages.length;
-                
+
                 const comboEl = document.getElementById('stat-combo');
                 if (comboEl) comboEl.textContent = this.state.maxCombo;
-                
+
                 const progressPct = Math.round((this.state.completedStages.length / CONTENT_STAGES.length) * 100);
                 const progressEl = document.getElementById('stat-progress');
                 if (progressEl) progressEl.textContent = `${progressPct}%`;
-                
+
                 setTimeout(() => {
                     const bar = document.getElementById('home-progress-bar');
                     if (bar) bar.style.width = `${progressPct}%`;
@@ -1107,7 +1527,7 @@
             awardBadge(id, name) {
                 if (!this.state) this.state = this.getDefaultState();
                 if (!this.state.badges) this.state.badges = [];
-                if(!this.state.badges.find(b => b.id === id)) {
+                if (!this.state.badges.find(b => b.id === id)) {
                     this.state.badges.push({id, name});
                     this.showMessage("You earned a new badge: " + name + "!", "Achievement Unlocked!");
                 }
@@ -1117,7 +1537,7 @@
                 const container = document.getElementById('map-container');
                 if (!container) return;
                 container.innerHTML = '';
-                
+
                 if (!this.state) this.state = this.getDefaultState();
                 if (!this.state.completedStages) this.state.completedStages = [];
                 if (!this.state.skippedStages) this.state.skippedStages = [];
@@ -1132,7 +1552,7 @@
                         mapCertContainer.classList.add('hidden');
                     }
                 }
-                
+
                 const line = document.createElement('div');
                 line.className = 'path-line top-4 bottom-4';
                 container.appendChild(line);
@@ -1143,14 +1563,13 @@
                     const isSkipped = this.state.skippedStages.includes(stage.id);
                     const isCompleted = this.state.completedStages.includes(stage.id);
                     const isCurrent = stage.id === this.state.currentStageId;
-                    
+
                     const node = document.createElement('div');
-                    node.className = `map-node flex items-center justify-between p-4 mb-6 rounded-2xl border-2 transition-all bg-white relative ${
-                        isSkipped ? 'border-amber-200 bg-amber-50/40 opacity-90' : 
-                        (isCurrent ? 'border-islamic-500 shadow-md cursor-pointer hover:shadow-lg transform hover:-translate-y-1 hover:border-islamic-600 ring-2 ring-islamic-200 group' :
-                        'border-gray-200 hover:border-islamic-400 cursor-pointer hover:shadow-md transform hover:-translate-y-0.5 group')
-                    }`;
-                    
+                    node.className = `map-node flex items-center justify-between p-4 mb-6 rounded-2xl border-2 transition-all bg-white relative ${isSkipped ? 'border-amber-200 bg-amber-50/40 opacity-90' :
+                            (isCurrent ? 'border-islamic-500 shadow-md cursor-pointer hover:shadow-lg transform hover:-translate-y-1 hover:border-islamic-600 ring-2 ring-islamic-200 group' :
+                                'border-gray-200 hover:border-islamic-400 cursor-pointer hover:shadow-md transform hover:-translate-y-0.5 group')
+                        }`;
+
                     if (isSkipped) {
                         node.onclick = () => {
                             this.showMessage(`${stage.title} is currently marked as skipped (+5 pts awarded). Click "Undo Skip" to restore this stage and enter it.`, "Skipped Stage ⏭️");
@@ -1162,10 +1581,10 @@
                         };
                     }
 
-                    const statusIcon = isSkipped ? `<div class="w-12 h-12 shrink-0 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xl ring-4 ring-amber-100 shadow-sm z-10">⏭️</div>` : 
-                                      (isCompleted ? `<div class="w-12 h-12 shrink-0 rounded-full bg-islamic-500 text-white flex items-center justify-center font-bold text-2xl ring-4 ring-islamic-100 shadow-sm z-10 group-hover:scale-110 transition-transform">✓</div>` : 
-                                      (isCurrent ? `<div class="w-12 h-12 shrink-0 rounded-full bg-islamic-gold text-white flex items-center justify-center font-bold text-2xl ring-4 ring-yellow-100 shadow-sm z-10 animate-bounce mt-2 group-hover:scale-110 transition-transform">${index + 1}</div>` :
-                                      `<div class="w-12 h-12 shrink-0 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center font-bold z-10 text-xl">${index + 1}</div>`));
+                    const statusIcon = isSkipped ? `<div class="w-12 h-12 shrink-0 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xl ring-4 ring-amber-100 shadow-sm z-10">⏭️</div>` :
+                        (isCompleted ? `<div class="w-12 h-12 shrink-0 rounded-full bg-islamic-500 text-white flex items-center justify-center font-bold text-2xl ring-4 ring-islamic-100 shadow-sm z-10 group-hover:scale-110 transition-transform">✓</div>` :
+                            (isCurrent ? `<div class="w-12 h-12 shrink-0 rounded-full bg-islamic-gold text-white flex items-center justify-center font-bold text-2xl ring-4 ring-yellow-100 shadow-sm z-10 animate-bounce mt-2 group-hover:scale-110 transition-transform">${index + 1}</div>` :
+                                `<div class="w-12 h-12 shrink-0 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center font-bold z-10 text-xl">${index + 1}</div>`));
 
                     const skipBtnHtml = isSkipped ? `
                         <button onclick="app.undoSkipStageById(${stage.id}, event)" 
@@ -1201,9 +1620,9 @@
                         </div>
                     `;
                     container.appendChild(node);
-                    
-                    if(isCompleted || isSkipped) {
-                        completedPathHeight = (index + 1) * (node.offsetHeight + 24); 
+
+                    if (isCompleted || isSkipped) {
+                        completedPathHeight = (index + 1) * (node.offsetHeight + 24);
                     }
                 });
 
@@ -1232,7 +1651,7 @@
                 if (!stage) return;
 
                 const sequence = this.generateRichExerciseSequence(stage);
-                
+
                 this.state.activeSession = {
                     stage: stage,
                     sequence: sequence,
@@ -1254,39 +1673,39 @@
                 if (stageTitleMobileEl) stageTitleMobileEl.textContent = stageTitle;
                 document.getElementById('ex-stars-earned').textContent = '0';
                 this.updateGamificationUI();
-                
+
                 this.showView('exercise');
                 this.renderCurrentExercise();
             },
-            
+
             startDailyChallenge() {
                 if (!this.state) this.state = this.getDefaultState();
                 if (!this.state.completedStages) this.state.completedStages = [];
                 if (!this.state.skippedStages) this.state.skippedStages = [];
 
                 const eligibleIds = this.state.completedStages.filter(id => !this.state.skippedStages.includes(id));
-                if(eligibleIds.length === 0) {
+                if (eligibleIds.length === 0) {
                     this.showMessage("Complete at least one stage first to unlock the Daily Challenge!", "Locked");
                     return;
                 }
-                
+
                 let mixedChunks = [];
                 eligibleIds.forEach(id => {
                     const s = CONTENT_STAGES.find(x => x.id === id);
-                    if(s) mixedChunks.push(...s.chunks);
+                    if (s) mixedChunks.push(...s.chunks);
                 });
-                
+
                 mixedChunks = mixedChunks.sort(() => 0.5 - Math.random()).slice(0, 10);
-                
+
                 const sequence = [];
                 mixedChunks.forEach(chunk => {
                     const types = ['mcq-meaning', 'mcq-franco', 'fill-blank', 'order-words', 'find-mistake'];
                     const type = types[Math.floor(Math.random() * types.length)];
-                    sequence.push({ type: type, data: chunk });
+                    sequence.push({type: type, data: chunk});
                 });
 
                 this.state.activeSession = {
-                    stage: { title: "Daily Challenge" },
+                    stage: {title: "Daily Challenge"},
                     sequence: sequence,
                     currentIndex: 0,
                     starsEarned: 0,
@@ -1295,7 +1714,7 @@
                     isReview: true,
                     mistakesLog: []
                 };
-                
+
                 const challengeTitle = "🌟 Daily Challenge";
                 const stageTitleEl = document.getElementById('ex-stage-title');
                 if (stageTitleEl) stageTitleEl.textContent = challengeTitle;
@@ -1309,11 +1728,11 @@
             generateRichExerciseSequence(stage) {
                 const seq = [];
                 const posName = stage.positionName || stage.title;
-                
+
                 stage.chunks.forEach((chunk, index) => {
-                    seq.push({ 
-                        type: 'learn', 
-                        data: chunk, 
+                    seq.push({
+                        type: 'learn',
+                        data: chunk,
                         intro: index === 0 && stage.transitionInfo ? stage.transitionInfo : null,
                         image: stage.image,
                         stageTitle: stage.title,
@@ -1322,30 +1741,30 @@
                 });
 
                 stage.chunks.forEach((chunk, index) => {
-                    seq.push({ type: 'mcq-meaning', data: chunk, stageTitle: stage.title, positionName: posName }); 
-                    seq.push({ type: 'mcq-franco', data: chunk, stageTitle: stage.title, positionName: posName }); 
-                    if(chunk.ar.split(' ').length > 2) {
-                        seq.push({ type: 'find-mistake', data: chunk, stageTitle: stage.title, positionName: posName }); 
-                        seq.push({ type: 'order-words', data: chunk, stageTitle: stage.title, positionName: posName }); 
+                    seq.push({type: 'mcq-meaning', data: chunk, stageTitle: stage.title, positionName: posName});
+                    seq.push({type: 'mcq-franco', data: chunk, stageTitle: stage.title, positionName: posName});
+                    if (chunk.ar.split(' ').length > 2) {
+                        seq.push({type: 'find-mistake', data: chunk, stageTitle: stage.title, positionName: posName});
+                        seq.push({type: 'order-words', data: chunk, stageTitle: stage.title, positionName: posName});
                     }
-                    if(index > 0) {
-                        seq.push({ type: 'what-next', data: stage.chunks[index-1], next: chunk, stageTitle: stage.title, positionName: posName });
+                    if (index > 0) {
+                        seq.push({type: 'what-next', data: stage.chunks[index - 1], next: chunk, stageTitle: stage.title, positionName: posName});
                     }
                 });
-                
+
                 // Only include match-pairs and memory-cards when there are at least 2 distinct pairs
                 if (stage.chunks && stage.chunks.length >= 2) {
-                    seq.push({ type: 'match-pairs', data: stage.chunks, stageTitle: stage.title, positionName: posName });
-                    seq.push({ type: 'memory-cards', data: stage.chunks, stageTitle: stage.title, positionName: posName });
+                    seq.push({type: 'match-pairs', data: stage.chunks, stageTitle: stage.title, positionName: posName});
+                    seq.push({type: 'memory-cards', data: stage.chunks, stageTitle: stage.title, positionName: posName});
                 }
 
                 stage.chunks.forEach((chunk) => {
-                    if(chunk.ar.split(' ').length > 1) {
-                         seq.push({ type: 'fill-blank', data: chunk, stageTitle: stage.title, positionName: posName });
+                    if (chunk.ar.split(' ').length > 1) {
+                        seq.push({type: 'fill-blank', data: chunk, stageTitle: stage.title, positionName: posName});
                     }
                 });
 
-                seq.push({ type: 'master-challenge', data: stage, positionName: posName });
+                seq.push({type: 'master-challenge', data: stage, positionName: posName});
                 return seq;
             },
 
@@ -1353,15 +1772,15 @@
                 const s = this.state?.activeSession;
                 if (!s) return;
                 let heartsHtml = '';
-                for(let i=0; i<3; i++) {
+                for (let i = 0; i < 3; i++) {
                     heartsHtml += i < s.hearts ? '❤️' : '🖤';
                 }
                 const heartsEl = document.getElementById('ex-hearts');
                 if (heartsEl) heartsEl.innerHTML = heartsHtml;
-                
+
                 const comboEl = document.getElementById('ex-combo-text');
                 if (comboEl) {
-                    if(s.combo > 1) {
+                    if (s.combo > 1) {
                         comboEl.textContent = `🔥x${s.combo}`;
                         comboEl.classList.remove('hidden');
                         comboEl.classList.add('combo-anim');
@@ -1370,7 +1789,7 @@
                         comboEl.classList.add('hidden');
                     }
                 }
-                
+
                 const starsEl = document.getElementById('ex-stars-earned');
                 if (starsEl) starsEl.textContent = s.starsEarned;
                 const exPointsEl = document.getElementById('ex-points');
@@ -1579,7 +1998,7 @@
                     event.preventDefault();
                 }
                 this.stopQuestionTimer();
-                
+
                 const currentId = Number(stageId);
                 if (!this.state) this.state = this.getDefaultState();
                 if (!this.state.skippedStages) this.state.skippedStages = [];
@@ -1759,7 +2178,7 @@
             getUniqueDistractors(correctAnswer, targetLang, count = 3) {
                 const targetNorm = this.normalizeText(correctAnswer, targetLang);
                 const seenNorms = new Set([targetNorm]);
-                
+
                 // Collect candidates from all stages
                 const pool = [];
                 CONTENT_STAGES.forEach(st => {
@@ -1805,7 +2224,7 @@
                 const targetNorm = this.normalizeText(hiddenWord, 'ar');
                 const seenNorms = new Set([targetNorm]);
                 const distractorPool = [];
-                
+
                 CONTENT_STAGES.forEach(st => {
                     if (st.chunks) {
                         st.chunks.forEach(ch => {
@@ -1859,45 +2278,45 @@
             renderCurrentExercise() {
                 const session = this.state.activeSession;
                 if (!session) return;
-                
+
                 this.stopQuestionTimer();
 
-                if(session.currentIndex >= session.sequence.length) {
+                if (session.currentIndex >= session.sequence.length) {
                     if (session.mistakesLog.length > 0) {
                         this.showMessage("Let's quickly practice the ones you missed to make sure you've mastered them!", "Practice Makes Perfect");
                         const remedial = [];
                         const uniqueMistakes = [...new Set(session.mistakesLog)];
                         uniqueMistakes.forEach(chunk => {
-                            remedial.push({ 
-                                type: 'learn', 
-                                data: chunk, 
-                                image: session.stage.image, 
-                                stageTitle: session.stage.title 
+                            remedial.push({
+                                type: 'learn',
+                                data: chunk,
+                                image: session.stage.image,
+                                stageTitle: session.stage.title
                             });
-                            remedial.push({ type: 'mcq-meaning', data: chunk });
-                            remedial.push({ type: 'order-words', data: chunk });
+                            remedial.push({type: 'mcq-meaning', data: chunk});
+                            remedial.push({type: 'order-words', data: chunk});
                         });
                         session.sequence = session.sequence.concat(remedial);
-                        session.mistakesLog = []; 
+                        session.mistakesLog = [];
                     } else {
                         this.finishStage();
                         return;
                     }
                 }
-                
+
                 const ex = session.sequence[session.currentIndex];
                 const area = document.getElementById('exercise-content-area');
                 const footer = document.getElementById('exercise-footer');
-                
+
                 const progress = ((session.currentIndex) / session.sequence.length) * 100;
                 document.getElementById('ex-progress-bar').style.width = `${progress}%`;
                 document.getElementById('ex-progress-bar-mobile').style.width = `${progress}%`;
-                
+
                 // Dynamic Question Counter: e.g. "Question 1 of 12"
                 const currentQ = (session.currentIndex || 0) + 1;
                 const totalQ = session.sequence ? session.sequence.length : 0;
                 const counterText = `Question ${currentQ} of ${totalQ}`;
-                
+
                 const counterEl = document.getElementById('ex-counter-text');
                 if (counterEl) counterEl.textContent = counterText;
                 const counterMobileEl = document.getElementById('ex-counter-text-mobile');
@@ -1910,10 +2329,10 @@
                 if (stageTitleEl && fullStageTitle) stageTitleEl.textContent = fullStageTitle;
                 const stageTitleMobileEl = document.getElementById('ex-stage-title-mobile');
                 if (stageTitleMobileEl && fullStageTitle) stageTitleMobileEl.textContent = fullStageTitle;
-                
+
                 area.innerHTML = '';
                 footer.innerHTML = '';
-                area.className = "flex-grow min-h-0 flex flex-col justify-center w-full pop-in my-auto overflow-hidden"; 
+                area.className = "flex-grow min-h-0 flex flex-col justify-center w-full pop-in my-auto overflow-hidden";
 
                 // Start visible countdown timer ONLY on question activities (never on learn / prayer adhkar text screens)
                 const timerContainer = document.getElementById('ex-timer-container');
@@ -1925,7 +2344,7 @@
                     this.startQuestionTimer(45);
                 }
 
-                switch(ex.type) {
+                switch (ex.type) {
                     case 'learn': this.renderLearn(ex, area, footer); break;
                     case 'mcq-meaning': this.renderMCQ(ex, 'en', area, footer); break;
                     case 'mcq-franco': this.renderMCQ(ex, 'fr', area, footer); break;
@@ -1943,16 +2362,16 @@
                 const s = this.state.activeSession;
                 s.combo++;
                 if (s.combo > this.state.maxCombo) this.state.maxCombo = s.combo;
-                
-                if(s.combo === 5) this.awardBadge('combo5', '🔥 5 Combo');
-                if(s.combo === 10) this.awardBadge('combo10', '🏆 Perfect 10 Combo');
+
+                if (s.combo === 5) this.awardBadge('combo5', '🔥 5 Combo');
+                if (s.combo === 10) this.awardBadge('combo10', '🏆 Perfect 10 Combo');
 
                 const pts = Math.max(10, 5 + s.combo);
                 s.starsEarned += 1;
                 this.state.points += pts;
-                
+
                 this.updateGamificationUI();
-                this.playCorrectSound(); 
+                this.playCorrectSound();
 
                 const continueBtn = `<button onclick="app.nextExercise()" class="bg-islamic-500 hover:bg-islamic-600 text-white font-extrabold py-3 sm:py-3.5 px-8 sm:px-12 rounded-2xl shadow-[0_4px_0_0_#0f766e] btn-press text-base sm:text-lg transition-all">Continue 👏</button>`;
                 this.renderExerciseFooter(continueBtn);
@@ -1962,18 +2381,18 @@
                 const s = this.state.activeSession;
                 s.combo = 0;
                 s.hearts--;
-                
+
                 if (chunkData && !s.mistakesLog.includes(chunkData)) {
-                    s.mistakesLog.push(chunkData); 
+                    s.mistakesLog.push(chunkData);
                 }
 
                 if (s.hearts <= 0) {
-                    s.hearts = 3; 
+                    s.hearts = 3;
                     this.showMessage("Don't worry about mistakes, they help you learn! Let's keep trying.", "Keep Going!");
                 }
-                
+
                 this.updateGamificationUI();
-                this.playWrongSound(); 
+                this.playWrongSound();
             },
 
             nextExercise() {
@@ -2005,20 +2424,20 @@
 
                     // Pleasant, cheerful ascending chime (C5 -> E5 -> G5 -> C6)
                     const notes = [
-                        { freq: 523.25, time: 0, dur: 0.22, vol: 0.35 },
-                        { freq: 659.25, time: 0.08, dur: 0.25, vol: 0.38 },
-                        { freq: 783.99, time: 0.16, dur: 0.30, vol: 0.40 },
-                        { freq: 1046.50, time: 0.25, dur: 0.50, vol: 0.45 }
+                        {freq: 523.25, time: 0, dur: 0.22, vol: 0.35},
+                        {freq: 659.25, time: 0.08, dur: 0.25, vol: 0.38},
+                        {freq: 783.99, time: 0.16, dur: 0.30, vol: 0.40},
+                        {freq: 1046.50, time: 0.25, dur: 0.50, vol: 0.45}
                     ];
 
                     notes.forEach(n => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
-                        
+
                         // Gentle primary sine tone
                         osc.type = 'sine';
                         osc.frequency.setValueAtTime(n.freq, now + n.time);
-                        
+
                         const start = now + n.time;
                         const end = start + n.dur;
 
@@ -2037,7 +2456,7 @@
                         const harmGain = ctx.createGain();
                         harmonic.type = 'triangle';
                         harmonic.frequency.setValueAtTime(n.freq * 2, now + n.time);
-                        
+
                         harmGain.gain.setValueAtTime(0.0001, start);
                         harmGain.gain.linearRampToValueAtTime(n.vol * 0.25, start + 0.02);
                         harmGain.gain.exponentialRampToValueAtTime(0.0001, end);
@@ -2048,7 +2467,7 @@
                         harmonic.start(start);
                         harmonic.stop(end);
                     });
-                } catch(e) {
+                } catch (e) {
                     console.error("Audio error:", e);
                 }
             },
@@ -2061,8 +2480,8 @@
 
                     // Loud, dissonant warning buzzer (2 distinct pulses)
                     const buzzPulses = [
-                        { start: 0, dur: 0.16 },
-                        { start: 0.20, dur: 0.28 }
+                        {start: 0, dur: 0.16},
+                        {start: 0.20, dur: 0.28}
                     ];
 
                     buzzPulses.forEach(pulse => {
@@ -2092,7 +2511,7 @@
                             osc.stop(end);
                         });
                     });
-                } catch(e) {
+                } catch (e) {
                     console.error("Audio error:", e);
                 }
             },
@@ -2107,12 +2526,12 @@
                     gainNode.connect(audioCtx.destination);
                     oscillator.type = 'sine';
                     oscillator.frequency.setValueAtTime(freqStart, audioCtx.currentTime);
-                    oscillator.frequency.exponentialRampToValueAtTime(freqEnd, audioCtx.currentTime + duration/2);
+                    oscillator.frequency.exponentialRampToValueAtTime(freqEnd, audioCtx.currentTime + duration / 2);
                     gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
                     oscillator.start();
                     oscillator.stop(audioCtx.currentTime + duration);
-                } catch(e) {} 
+                } catch (e) { }
             },
 
             renderLearn(ex, area, footer) {
@@ -2120,10 +2539,10 @@
                 const imgUrl = ex.image || this.state.activeSession?.stage?.image;
                 const posName = ex.positionName || this.state.activeSession?.stage?.positionName || ex.stageTitle || 'Prayer Position';
                 let html = '';
-                if(ex.intro) {
+                if (ex.intro) {
                     html += `<div class="bg-blue-50 border-l-4 border-blue-500 p-2 sm:p-3 rounded-2xl text-blue-900 mb-1.5 sm:mb-2 text-xs sm:text-sm md:text-base font-bold flex items-center shadow-sm w-full flex-shrink-0" dir="ltr"><span class="text-lg mr-2">💡</span> ${ex.intro}</div>`;
                 }
-                
+
                 html += `
                     <div class="bg-white p-3 sm:p-4 md:p-6 rounded-3xl shadow-lg border border-gray-100 relative w-full h-full max-h-full flex flex-col justify-between overflow-hidden">
                         <div class="flex items-center justify-between mb-2 sm:mb-3 border-b border-gray-100 pb-1.5 sm:pb-2 flex-shrink-0">
@@ -2178,7 +2597,7 @@
                     </div>
                 `;
                 area.innerHTML = html;
-                
+
                 const continueBtn = `<button onclick="app.nextExercise()" class="bg-islamic-500 hover:bg-islamic-600 text-white font-extrabold py-2.5 sm:py-3 px-8 sm:px-12 rounded-2xl shadow-[0_4px_0_0_#0f766e] btn-press text-base sm:text-lg transition-all">I've got it, Next</button>`;
                 this.renderExerciseFooter(continueBtn);
             },
@@ -2186,7 +2605,7 @@
             renderMCQ(ex, targetLang, area, footer) {
                 const chunk = ex.data;
                 const correctAnswer = chunk[targetLang];
-                
+
                 const distractors = this.getUniqueDistractors(correctAnswer, targetLang, 3);
                 let options = [correctAnswer, ...distractors];
                 options.sort(() => Math.random() - 0.5);
@@ -2197,12 +2616,12 @@
                 } else if (ex.stageTitle && ex.stageTitle.includes('Second Sujood')) {
                     questionText = targetLang === 'en' ? "In the Second Sujood, what is the meaning of this Dhikr?" : "In the Second Sujood, how do you pronounce this Dhikr?";
                 }
-                
+
                 const choiceStyles = [
-                    { barColor: 'border-l-sky-500', badgeBg: 'bg-sky-500 text-white', letter: 'A' },
-                    { barColor: 'border-l-emerald-500', badgeBg: 'bg-emerald-500 text-white', letter: 'B' },
-                    { barColor: 'border-l-amber-500', badgeBg: 'bg-amber-500 text-white', letter: 'C' },
-                    { barColor: 'border-l-purple-500', badgeBg: 'bg-purple-500 text-white', letter: 'D' }
+                    {barColor: 'border-l-sky-500', badgeBg: 'bg-sky-500 text-white', letter: 'A'},
+                    {barColor: 'border-l-emerald-500', badgeBg: 'bg-emerald-500 text-white', letter: 'B'},
+                    {barColor: 'border-l-amber-500', badgeBg: 'bg-amber-500 text-white', letter: 'C'},
+                    {barColor: 'border-l-purple-500', badgeBg: 'bg-purple-500 text-white', letter: 'D'}
                 ];
 
                 let html = `
@@ -2246,7 +2665,7 @@
                 const chunk = typeof chunkStr === 'string' ? JSON.parse(chunkStr) : chunkStr;
                 const container = document.getElementById('mcq-options');
                 if (!container || container.classList.contains('answered')) return;
-                
+
                 this.stopQuestionTimer();
                 container.classList.add('answered');
 
@@ -2257,11 +2676,11 @@
                         icon.innerHTML = '✅';
                         icon.classList.remove('opacity-0');
                     }
-                    
+
                     Array.from(container.children).forEach(b => {
                         if (b !== btn) b.classList.add('opacity-40');
                     });
-                    
+
                     this.handleCorrect();
                 } else {
                     btn.classList.add('shake', '!bg-rose-100', '!border-rose-600', '!text-rose-950', '!border-l-rose-600', 'ring-4', 'ring-rose-400');
@@ -2300,10 +2719,10 @@
             renderOrderWords(ex, area, footer) {
                 const chunk = ex.data;
                 const words = chunk.ar.split(/\s+/).filter(w => w.length > 0);
-                if(words.length < 2) { this.nextExercise(); return; }
-                
+                if (words.length < 2) {this.nextExercise(); return;}
+
                 let shuffledWords = [...words].sort(() => Math.random() - 0.5);
-                window.currentOrderState = { original: words, current: new Array(words.length).fill(null), chunk: chunk };
+                window.currentOrderState = {original: words, current: new Array(words.length).fill(null), chunk: chunk};
 
                 const wordColors = [
                     'from-sky-50 to-sky-100 border-sky-400 text-sky-950 shadow-[0_4px_0_0_#38bdf8] hover:shadow-[0_6px_0_0_#0284c7]',
@@ -2326,17 +2745,17 @@
                         
                         <div class="bg-gradient-to-b from-white to-emerald-50/30 p-3 sm:p-5 rounded-3xl shadow-inner border-2 border-dashed border-emerald-300 mb-2 sm:mb-3 min-h-[90px] sm:min-h-[120px] flex flex-wrap justify-center arabic-text text-2xl sm:text-4xl md:text-5xl items-center gap-2 sm:gap-4 leading-snug flex-grow min-h-0" id="order-target-area" dir="rtl">
                 `;
-                
+
                 words.forEach((_, i) => {
                     html += `<div class="word-slot bg-gradient-to-b from-white to-gray-50 m-1 sm:m-1.5 p-2 sm:p-3 min-w-[75px] sm:min-w-[120px] md:min-w-[140px] min-h-[48px] sm:min-h-[64px] text-center rounded-2xl border-2 border-dashed border-emerald-300 shadow-sm cursor-pointer flex items-center justify-center text-2xl sm:text-4xl md:text-5xl font-extrabold arabic-text leading-snug" id="slot-${i}" onclick="app.handleOrderSlotClick(${i})"></div>`;
                 });
-                
+
                 html += `</div><div class="flex flex-wrap justify-center gap-2 sm:gap-3 arabic-text text-2xl sm:text-4xl md:text-5xl leading-snug flex-shrink-0" id="order-source-area" dir="rtl">`;
-                
+
                 shuffledWords.forEach((word, i) => {
                     html += `<div class="word-bank-item bg-gradient-to-b ${wordColors[i % wordColors.length]} hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none p-2.5 sm:p-4 px-4 sm:px-7 rounded-2xl border-2 cursor-pointer font-extrabold text-2xl sm:text-4xl md:text-5xl arabic-text leading-snug transition-all shadow-md m-1 sm:m-1.5 min-h-[48px] sm:min-h-[64px] flex items-center justify-center" id="bank-${i}" onclick="app.handleOrderBankClick(${i}, '${word}')">${word}</div>`;
                 });
-                
+
                 html += `</div></div>`;
                 area.innerHTML = html;
                 this.renderExerciseFooter();
@@ -2345,9 +2764,9 @@
             handleOrderBankClick(bankIdx, word) {
                 const state = window.currentOrderState;
                 const emptySlotIdx = state.current.findIndex(v => v === null);
-                
+
                 if (emptySlotIdx !== -1) {
-                    state.current[emptySlotIdx] = { word, bankIdx };
+                    state.current[emptySlotIdx] = {word, bankIdx};
                     const slot = document.getElementById(`slot-${emptySlotIdx}`);
                     slot.textContent = word;
                     slot.className = "word-slot filled pop-in bg-gradient-to-b from-emerald-50 to-emerald-100 border-2 border-solid border-emerald-500 text-emerald-950 m-1 sm:m-1.5 p-2 sm:p-3 min-w-[75px] sm:min-w-[120px] md:min-w-[140px] min-h-[48px] sm:min-h-[64px] text-center rounded-2xl shadow-md cursor-pointer flex items-center justify-center text-2xl sm:text-4xl md:text-5xl font-extrabold arabic-text leading-snug";
@@ -2374,7 +2793,7 @@
                     const currentSentence = state.current.map(i => i.word).join(' ');
                     const correctSentence = state.original.join(' ');
                     this.stopQuestionTimer();
-                    
+
                     if (currentSentence === correctSentence) {
                         document.getElementById('order-target-area').classList.remove('border-dashed', 'border-emerald-300');
                         document.getElementById('order-target-area').classList.add('border-solid', 'border-green-500', 'bg-green-50/50');
@@ -2411,13 +2830,13 @@
             renderFindMistake(ex, area, footer) {
                 const chunk = ex.data;
                 const words = chunk.ar.split(/\s+/).filter(w => w.length > 0);
-                if(words.length < 2) { this.nextExercise(); return; }
+                if (words.length < 2) {this.nextExercise(); return;}
 
                 const mistakeIndex = Math.floor(Math.random() * words.length);
                 const originalWord = words[mistakeIndex];
                 const originalNorm = this.normalizeText(originalWord, 'ar');
                 window.currentMistakeOriginal = originalWord;
-                
+
                 // Select a replacement word that is genuinely different from originalWord
                 const replacements = [
                     'الْغَفُورُ', 'الْكَرِيمُ', 'الْقُدُّوسُ', 'السَّلَامُ', 'الْمَلِكُ',
@@ -2452,12 +2871,12 @@
 
             checkFindMistake(el, isMistake, originalWord, chunkStr) {
                 const container = document.getElementById('mistake-container');
-                if(!container || container.classList.contains('answered')) return;
+                if (!container || container.classList.contains('answered')) return;
                 const chunk = typeof chunkStr === 'string' ? JSON.parse(chunkStr) : chunkStr;
                 this.stopQuestionTimer();
                 container.classList.add('answered');
 
-                if(isMistake) {
+                if (isMistake) {
                     el.classList.add('!bg-red-100', '!text-red-700', 'line-through', '!border-red-400');
                     const correction = document.createElement('span');
                     correction.className = 'text-green-700 font-black absolute -top-8 sm:-top-10 left-1/2 -translate-x-1/2 pop-in text-2xl sm:text-4xl bg-white px-3 py-1 rounded-xl border-2 border-green-500 shadow-md whitespace-nowrap z-10';
@@ -2492,13 +2911,13 @@
             },
 
             renderMatchPairs(ex, area, footer) {
-                let chunks = ex.data.slice(0, 4); 
-                if(chunks.length < 2) { this.nextExercise(); return; }
+                let chunks = ex.data.slice(0, 4);
+                if (chunks.length < 2) {this.nextExercise(); return;}
 
-                let leftCol = chunks.map(c => ({ id: c.ar, text: c.ar, type: 'ar' })).sort(() => Math.random() - 0.5);
-                let rightCol = chunks.map(c => ({ id: c.ar, text: c.en, type: 'en' })).sort(() => Math.random() - 0.5);
+                let leftCol = chunks.map(c => ({id: c.ar, text: c.ar, type: 'ar'})).sort(() => Math.random() - 0.5);
+                let rightCol = chunks.map(c => ({id: c.ar, text: c.en, type: 'en'})).sort(() => Math.random() - 0.5);
 
-                window.currentMatchState = { selectedLeft: null, selectedRight: null, pairsLeft: chunks.length };
+                window.currentMatchState = {selectedLeft: null, selectedRight: null, pairsLeft: chunks.length};
 
                 let html = `
                     <div class="bg-white p-3 sm:p-5 md:p-6 rounded-3xl shadow-lg border border-gray-100 relative w-full h-full max-h-full flex flex-col justify-between overflow-hidden">
@@ -2519,32 +2938,32 @@
                     html += `<div class="match-btn bg-white border-2 border-gray-200 p-3.5 sm:p-5 rounded-2xl text-center font-bold text-gray-800 shadow-sm flex items-center justify-center h-full text-sm sm:text-lg md:text-xl cursor-pointer transition-all" data-id="${item.id}" onclick="app.handleMatchClick(this, 'right')">${item.text}</div>`;
                 });
                 html += `</div></div></div>`;
-                
+
                 area.innerHTML = html;
                 this.renderExerciseFooter();
             },
 
             handleMatchClick(el, side) {
-                if(el.classList.contains('matched')) return;
+                if (el.classList.contains('matched')) return;
                 const state = window.currentMatchState;
 
                 document.getElementById(`match-${side}`).querySelectorAll('.match-btn').forEach(btn => btn.classList.remove('selected'));
                 el.classList.add('selected');
-                
-                if(side === 'left') state.selectedLeft = el;
+
+                if (side === 'left') state.selectedLeft = el;
                 else state.selectedRight = el;
 
-                if(state.selectedLeft && state.selectedRight) {
-                    if(state.selectedLeft.dataset.id === state.selectedRight.dataset.id) {
+                if (state.selectedLeft && state.selectedRight) {
+                    if (state.selectedLeft.dataset.id === state.selectedRight.dataset.id) {
                         state.selectedLeft.classList.replace('selected', 'matched');
                         state.selectedRight.classList.replace('selected', 'matched');
                         state.pairsLeft--;
-                        
+
                         this.playSound(800, 1200, 0.15, 0.35);
                         state.selectedLeft = null;
                         state.selectedRight = null;
 
-                        if(state.pairsLeft === 0) {
+                        if (state.pairsLeft === 0) {
                             setTimeout(() => this.handleCorrect(), 500);
                         }
                     } else {
@@ -2552,13 +2971,13 @@
                         const r = state.selectedRight;
                         l.classList.add('shake', 'border-red-500', 'bg-red-50');
                         r.classList.add('shake', 'border-red-500', 'bg-red-50');
-                        
+
                         setTimeout(() => {
                             l.classList.remove('selected', 'shake', 'border-red-500', 'bg-red-50');
                             r.classList.remove('selected', 'shake', 'border-red-500', 'bg-red-50');
                         }, 500);
-                        
-                        this.handleWrong(); 
+
+                        this.handleWrong();
                         state.selectedLeft = null;
                         state.selectedRight = null;
                     }
@@ -2566,17 +2985,17 @@
             },
 
             renderMemoryCards(ex, area, footer) {
-                let chunks = ex.data.slice(0, 3); 
-                if(chunks.length < 2) { this.nextExercise(); return; }
+                let chunks = ex.data.slice(0, 3);
+                if (chunks.length < 2) {this.nextExercise(); return;}
 
                 let cards = [];
                 chunks.forEach((c, i) => {
-                    cards.push({ id: i, text: c.ar, type: 'ar' });
-                    cards.push({ id: i, text: c.fr, type: 'fr' });
+                    cards.push({id: i, text: c.ar, type: 'ar'});
+                    cards.push({id: i, text: c.fr, type: 'fr'});
                 });
                 cards.sort(() => Math.random() - 0.5);
 
-                window.currentMemState = { selected1: null, selected2: null, pairsLeft: chunks.length };
+                window.currentMemState = {selected1: null, selected2: null, pairsLeft: chunks.length};
 
                 let html = `
                     <div class="bg-white p-3 sm:p-5 md:p-6 rounded-3xl shadow-lg border border-gray-100 relative w-full h-full max-h-full flex flex-col justify-between overflow-hidden">
@@ -2607,16 +3026,16 @@
 
             handleMemClick(el, id) {
                 const state = window.currentMemState;
-                if(el.classList.contains('flipped') || el.classList.contains('matched') || state.selected2) return;
+                if (el.classList.contains('flipped') || el.classList.contains('matched') || state.selected2) return;
 
                 el.classList.add('flipped');
-                
-                if(!state.selected1) {
-                    state.selected1 = { el, id };
+
+                if (!state.selected1) {
+                    state.selected1 = {el, id};
                 } else {
-                    state.selected2 = { el, id };
-                    
-                    if(state.selected1.id === state.selected2.id) {
+                    state.selected2 = {el, id};
+
+                    if (state.selected1.id === state.selected2.id) {
                         setTimeout(() => {
                             state.selected1.el.classList.add('matched');
                             state.selected2.el.classList.add('matched');
@@ -2624,8 +3043,8 @@
                             state.selected1 = null;
                             state.selected2 = null;
                             this.playSound(800, 1200, 0.15, 0.35);
-                            
-                            if(state.pairsLeft === 0) {
+
+                            if (state.pairsLeft === 0) {
                                 setTimeout(() => this.handleCorrect(), 600);
                             }
                         }, 600);
@@ -2644,16 +3063,16 @@
             renderWhatNext(ex, area, footer) {
                 const prevChunk = ex.data;
                 const correctNextChunk = ex.next;
-                
+
                 const distractors = this.getUniqueDistractors(correctNextChunk.ar, 'ar', 3);
                 let options = [correctNextChunk.ar, ...distractors];
                 options.sort(() => Math.random() - 0.5);
 
                 const choiceStyles = [
-                    { barColor: 'border-l-sky-500', badgeBg: 'bg-sky-500 text-white', letter: 'A' },
-                    { barColor: 'border-l-emerald-500', badgeBg: 'bg-emerald-500 text-white', letter: 'B' },
-                    { barColor: 'border-l-amber-500', badgeBg: 'bg-amber-500 text-white', letter: 'C' },
-                    { barColor: 'border-l-purple-500', badgeBg: 'bg-purple-500 text-white', letter: 'D' }
+                    {barColor: 'border-l-sky-500', badgeBg: 'bg-sky-500 text-white', letter: 'A'},
+                    {barColor: 'border-l-emerald-500', badgeBg: 'bg-emerald-500 text-white', letter: 'B'},
+                    {barColor: 'border-l-amber-500', badgeBg: 'bg-amber-500 text-white', letter: 'C'},
+                    {barColor: 'border-l-purple-500', badgeBg: 'bg-purple-500 text-white', letter: 'D'}
                 ];
 
                 let html = `
@@ -2691,12 +3110,12 @@
                 area.innerHTML = html;
                 this.renderExerciseFooter();
             },
-            
+
             checkWhatNext(btn, isCorrect, chunkStr) {
                 const chunk = typeof chunkStr === 'string' ? JSON.parse(chunkStr) : chunkStr;
                 const container = document.getElementById('what-next-options');
                 if (!container || container.classList.contains('answered')) return;
-                
+
                 this.stopQuestionTimer();
                 container.classList.add('answered');
 
@@ -2748,12 +3167,12 @@
             renderFillBlank(ex, area, footer) {
                 const chunk = ex.data;
                 const words = chunk.ar.split(/\s+/).filter(w => w.length > 0);
-                if(words.length < 2) { this.nextExercise(); return; } 
-                
+                if (words.length < 2) {this.nextExercise(); return;}
+
                 const hiddenIndex = Math.floor(Math.random() * words.length);
                 const hiddenWord = words[hiddenIndex];
                 window.currentFillBlankCorrect = hiddenWord;
-                
+
                 let displaySentence = '';
                 words.forEach((w, i) => {
                     if (i === hiddenIndex) {
@@ -2765,9 +3184,9 @@
 
                 const uniqueOptions = this.getFillBlankOptions(hiddenWord);
                 const choiceStyles = [
-                    { barColor: 'border-r-sky-500' },
-                    { barColor: 'border-r-emerald-500' },
-                    { barColor: 'border-r-amber-500' }
+                    {barColor: 'border-r-sky-500'},
+                    {barColor: 'border-r-emerald-500'},
+                    {barColor: 'border-r-amber-500'}
                 ];
 
                 let html = `
@@ -2807,7 +3226,7 @@
                 const chunk = typeof chunkStr === 'string' ? JSON.parse(chunkStr) : chunkStr;
                 const container = document.getElementById('fill-options');
                 if (!container || container.classList.contains('answered')) return;
-                
+
                 this.stopQuestionTimer();
                 container.classList.add('answered');
 
@@ -2827,7 +3246,7 @@
                     this.handleCorrect();
                 } else {
                     btn.classList.add('shake', '!bg-rose-100', '!border-rose-600', '!text-rose-950', '!border-r-rose-600', 'ring-4', 'ring-rose-400');
-                    
+
                     const blankSpot = document.getElementById('blank-spot');
                     if (blankSpot) {
                         blankSpot.textContent = correct;
@@ -2860,7 +3279,7 @@
                 const stage = ex.data;
                 const allAr = stage.arabic;
                 const posName = stage.positionName || ex.positionName || stage.title || 'Prayer Position';
-                
+
                 let html = `
                     <div class="bg-white p-3 sm:p-5 md:p-6 rounded-3xl shadow-lg border border-gray-100 relative w-full h-full max-h-full flex flex-col justify-between overflow-hidden">
                         <div class="text-center mb-2 sm:mb-3 pop-in w-full flex-shrink-0">
@@ -2896,7 +3315,7 @@
                         </div>
                     </div>
                 `;
-                
+
                 area.innerHTML = html;
                 const revealBtn = `<button onclick="app.revealMasterChallenge('${btoa(unescape(encodeURIComponent(allAr)))}')" class="bg-white border-2 border-islamic-500 text-islamic-700 font-extrabold py-2.5 sm:py-3 px-8 sm:px-12 rounded-2xl hover:bg-islamic-50 transition-colors text-base sm:text-lg shadow-sm">Reveal Answer</button>`;
                 this.renderExerciseFooter(revealBtn);
@@ -2909,7 +3328,7 @@
                 input.readOnly = true;
                 input.classList.remove('bg-gray-50', 'border-gray-200');
                 input.classList.add('bg-green-50', 'border-green-500', 'text-green-950', 'pop-in');
-                
+
                 const actionHtml = `
                     <div class="flex items-center gap-3 sm:gap-4">
                         <button onclick="app.handleWrong()" class="bg-red-100 hover:bg-red-200 text-red-800 font-extrabold py-2.5 sm:py-3 px-6 sm:px-8 rounded-2xl border border-red-300 transition-colors text-sm sm:text-base">Need Practice</button>
@@ -2924,7 +3343,7 @@
                 const session = this.state.activeSession;
                 if (!session || !session.stage) return;
                 const stageId = Number(session.stage.id);
-                
+
                 if (!this.state) this.state = this.getDefaultState();
                 if (!this.state.completedStages) this.state.completedStages = [];
                 if (!this.state.skippedStages) this.state.skippedStages = [];
@@ -2932,8 +3351,8 @@
                 if (!session.isReview) {
                     if (!this.state.completedStages.includes(stageId)) {
                         this.state.completedStages.push(stageId);
-                        
-                        if(this.state.completedStages.length === 7) this.awardBadge('halfway', '🏆 Halfway There');
+
+                        if (this.state.completedStages.length === 7) this.awardBadge('halfway', '🏆 Halfway There');
                     }
 
                     // Advance currentStageId past all completed and skipped stages
@@ -2962,10 +3381,10 @@
 
             confirmExitStage() {
                 this.stopQuestionTimer();
-                if(this.state.activeSession?.isReview) {
+                if (this.state.activeSession?.isReview) {
                     this.showView('review');
                 } else {
-                    if(confirm("Are you sure you want to leave? Your progress in this specific stage will not be saved.")) {
+                    if (confirm("Are you sure you want to leave? Your progress in this specific stage will not be saved.")) {
                         this.showView('map');
                     }
                 }
@@ -2975,11 +3394,11 @@
                 const container = document.getElementById('review-list');
                 if (!container) return;
                 container.innerHTML = '';
-                
+
                 if (!this.state) this.state = this.getDefaultState();
                 if (!this.state.completedStages) this.state.completedStages = [];
                 if (!this.state.skippedStages) this.state.skippedStages = [];
-                
+
                 const reviewableStages = this.state.completedStages.filter(id => !this.state.skippedStages.includes(id));
                 if (reviewableStages.length === 0) {
                     container.innerHTML = `<div class="col-span-full text-center p-12 bg-white rounded-2xl shadow-sm border border-gray-100"><div class="text-5xl mb-4 opacity-50">🔒</div><p class="text-gray-500 font-medium text-lg">Complete stages to unlock the next level.</p></div>`;
@@ -2991,7 +3410,7 @@
                         const card = document.createElement('div');
                         card.className = 'bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-lg transition-all cursor-pointer group hover:-translate-y-1 relative overflow-hidden';
                         card.onclick = () => this.startStage(stage.id, true);
-                        
+
                         card.innerHTML = `
                             <div class="absolute top-0 right-0 w-16 h-16 bg-islamic-50 rounded-bl-full -z-10 group-hover:bg-islamic-100 transition-colors"></div>
                             ${stage.image ? `
@@ -3021,10 +3440,10 @@
             generateCertificate() {
                 const today = new Date();
                 const locale = 'en-US';
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 document.getElementById('cert-date').textContent = today.toLocaleDateString(locale, options);
                 document.getElementById('cert-name').textContent = this.state.name || "Student Name";
-                
+
                 this.fireConfetti();
                 setTimeout(() => this.fireConfetti(), 1000);
             },
@@ -3032,7 +3451,7 @@
             downloadCertificateDirect() {
                 const today = new Date();
                 const locale = 'en-US';
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {year: 'numeric', month: 'long', day: 'numeric'};
                 const dateEl = document.getElementById('cert-date');
                 if (dateEl) dateEl.textContent = today.toLocaleDateString(locale, options);
                 const nameEl = document.getElementById('cert-name');
@@ -3058,27 +3477,27 @@
                 this.fireConfetti();
 
                 html2canvas(certElement, {
-                    scale: 2, 
-                    useCORS: true, 
-                    backgroundColor: "#ffffff" 
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: "#ffffff"
                 }).then(canvas => {
                     certView.setAttribute('style', originalStyle);
                     if (wasHidden) certView.classList.add('hidden');
 
                     const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    
+                    const {jsPDF} = window.jspdf;
+
                     const pdf = new jsPDF({
                         orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
                         unit: 'px',
                         format: [canvas.width, canvas.height]
                     });
-                    
+
                     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-                    
+
                     const studentName = this.state.name ? this.state.name.replace(/\s+/g, '_') : 'Student';
                     pdf.save(`Salah_Journey_Certificate_${studentName}.pdf`);
-                    
+
                     this.showMessage("🎉 Certificate downloaded directly to your device! Mashallah on completing your Salah Adhkar Journey!", "Certificate Downloaded! 🎓");
                 }).catch(err => {
                     console.error("Direct certificate error:", err);
@@ -3100,34 +3519,34 @@
                 const certElement = document.getElementById('cert-container');
                 const btn = document.getElementById('download-cert-btn');
                 const originalText = btn.innerHTML;
-                
+
                 btn.innerHTML = `<span class="animate-spin text-xl mr-2">⏳</span> Processing...`;
                 btn.disabled = true;
 
                 html2canvas(certElement, {
-                    scale: 2, 
+                    scale: 2,
                     useCORS: true,
-                    backgroundColor: "#ffffff" 
+                    backgroundColor: "#ffffff"
                 }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    
+                    const {jsPDF} = window.jspdf;
+
                     // Create a PDF with exact dimensions of the certificate
                     const pdf = new jsPDF({
                         orientation: canvas.width > canvas.height ? 'landscape' : 'portrait',
                         unit: 'px',
                         format: [canvas.width, canvas.height]
                     });
-                    
+
                     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-                    
+
                     const studentName = this.state.name ? this.state.name.replace(/\s+/g, '_') : 'Student';
                     pdf.save(`Salah_Journey_Certificate_${studentName}.pdf`);
-                    
+
                     btn.innerHTML = originalText;
                     btn.disabled = false;
                     this.showMessage("Certificate downloaded successfully as a PDF! You can find it in your device's downloads folder.", "Congratulations! 🎉");
-                    
+
                 }).catch(err => {
                     console.error("Error generating certificate PDF:", err);
                     btn.innerHTML = originalText;
@@ -3136,7 +3555,7 @@
                 });
             },
 
-            showMessage(text, title="Notice") {
+            showMessage(text, title = "Notice") {
                 document.getElementById('modal-title').textContent = title;
                 document.getElementById('modal-text').textContent = text;
                 document.getElementById('modal-message').classList.remove('hidden');
@@ -3150,13 +3569,13 @@
                 const overlay = document.getElementById('celebration-overlay');
                 document.getElementById('celebration-stars').textContent = stars;
                 overlay.classList.remove('hidden');
-                
+
                 this.fireConfetti();
                 this.playSound(400, 800, 0.5);
-                
+
                 setTimeout(() => {
                     overlay.classList.add('hidden');
-                    if(callback) callback();
+                    if (callback) callback();
                 }, 3500);
             },
 
@@ -3165,11 +3584,11 @@
                 const ctx = canvas.getContext('2d');
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-                
+
                 const particles = [];
                 const colors = ['#fbbf24', '#14b8a6', '#fcd34d', '#0f766e', '#ffffff', '#ef4444', '#3b82f6'];
-                
-                for(let i=0; i<150; i++) {
+
+                for (let i = 0; i < 150; i++) {
                     particles.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height - canvas.height,
@@ -3182,27 +3601,27 @@
                         rv: Math.random() * 10 - 5
                     });
                 }
-                
+
                 let animationId;
                 function draw() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     let active = false;
-                    
+
                     particles.forEach(p => {
                         p.y += p.vy;
                         p.x += p.vx;
                         p.rot += p.rv;
-                        if(p.y < canvas.height) active = true;
-                        
+                        if (p.y < canvas.height) active = true;
+
                         ctx.save();
                         ctx.translate(p.x, p.y);
                         ctx.rotate(p.rot * Math.PI / 180);
                         ctx.fillStyle = p.color;
-                        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+                        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
                         ctx.restore();
                     });
-                    
-                    if(active) {
+
+                    if (active) {
                         animationId = requestAnimationFrame(draw);
                     } else {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -3218,9 +3637,9 @@
                 this.showView('home');
                 this.showMessage("All stages unlocked for testing.", "Teacher Mode");
             },
-            
+
             resetProgress() {
-                if(confirm("Are you sure? This will delete ALL students and ALL progress permanently.")) {
+                if (confirm("Are you sure? This will delete ALL students and ALL progress permanently.")) {
                     localStorage.removeItem('salahJourney_multi_users');
                     location.reload();
                 }
@@ -3229,7 +3648,7 @@
             exportProgress() {
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.users));
                 const dlAnchorElem = document.createElement('a');
-                dlAnchorElem.setAttribute("href",     dataStr     );
+                dlAnchorElem.setAttribute("href", dataStr);
                 dlAnchorElem.setAttribute("download", `salah_class_backup_${new Date().toISOString().split('T')[0]}.json`);
                 dlAnchorElem.click();
             },
@@ -3245,7 +3664,7 @@
                 reader.onload = (e) => {
                     try {
                         const data = JSON.parse(e.target.result);
-                        if(data && typeof data === 'object' && !data.name) {
+                        if (data && typeof data === 'object' && !data.name) {
                             this.users = data;
                             this.logout();
                             this.saveProgress();
@@ -3265,8 +3684,8 @@
                 };
                 reader.readAsText(file);
             },
-            
-            showCertificate(isTest=false) {
+
+            showCertificate(isTest = false) {
                 if (isTest) {
                     this.state.name = "Test Student";
                     this.showView('certificate');
@@ -3298,4 +3717,5 @@
         window.addEventListener('load', startSalahApp);
     </script>
 </body>
+
 </html>
